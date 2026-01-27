@@ -1,11 +1,89 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { MessageCircle, X, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+interface Message {
+  id: number;
+  role: "user" | "assistant";
+  content: string;
+}
+
+const faqResponses: { patterns: string[]; response: string }[] = [
+  {
+    patterns: [
+      "clinical and non-clinical",
+      "clinical vs non-clinical",
+      "difference between clinical and non-clinical",
+      "what is clinical",
+      "what is non-clinical",
+      "non-clinical questions",
+      "clinical questions",
+    ],
+    response: `**Clinical vs non-clinical questions**
+
+In this questionnaire, the terms clinical and non-clinical describe who is qualified to provide the information.
+
+**Clinical questions** are those that require clinical judgement or medical expertise and must be completed by a qualified healthcare professional (e.g. neurologist, MS nurse).
+
+**Non-clinical questions** do not require clinical judgement and can be completed by a non-healthcare professional, such as a researcher. In many cases, this information can be obtained from the patient's medical record and transcribed into the data collection tool.
+
+This distinction helps ensure data is collected accurately and by the appropriate person.`,
+  },
+];
+
+const getResponse = (userMessage: string): string => {
+  const lowerMessage = userMessage.toLowerCase();
+  
+  for (const faq of faqResponses) {
+    for (const pattern of faq.patterns) {
+      if (lowerMessage.includes(pattern.toLowerCase())) {
+        return faq.response;
+      }
+    }
+  }
+  
+  return "I'm sorry, I don't have information about that specific topic yet. Please try asking about clinical vs non-clinical questions, or contact your administrator for more help.";
+};
+
 const ChatbotPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: 0,
+      role: "assistant",
+      content: "👋 Hello! I'm here to help you with the questionnaire.\n\nIf you have any questions about filling in the form, understanding specific fields, or need clarification on medical terminology, feel free to ask!\n\nTry asking: \"What is the difference between clinical and non-clinical questions?\"",
+    },
+  ]);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleSend = () => {
+    if (!message.trim()) return;
+
+    const userMessage: Message = {
+      id: messages.length,
+      role: "user",
+      content: message.trim(),
+    };
+
+    const assistantResponse: Message = {
+      id: messages.length + 1,
+      role: "assistant",
+      content: getResponse(message.trim()),
+    };
+
+    setMessages((prev) => [...prev, userMessage, assistantResponse]);
+    setMessage("");
+  };
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
@@ -28,17 +106,20 @@ const ChatbotPopup = () => {
           </div>
 
           {/* Messages Area */}
-          <div className="h-64 p-4 overflow-y-auto bg-muted/30">
-            <div className="bg-card border border-border rounded-lg p-3 text-sm text-foreground">
-              <p className="mb-2">
-                👋 Hello! I'm here to help you with the questionnaire.
-              </p>
-              <p className="text-muted-foreground">
-                If you have any questions about filling in the form, understanding
-                specific fields, or need clarification on medical terminology,
-                feel free to ask!
-              </p>
-            </div>
+          <div className="h-72 p-4 overflow-y-auto bg-muted/30 space-y-3">
+            {messages.map((msg) => (
+              <div
+                key={msg.id}
+                className={`${
+                  msg.role === "user"
+                    ? "ml-auto bg-primary text-primary-foreground"
+                    : "bg-card border border-border text-foreground"
+                } rounded-lg p-3 text-sm max-w-[85%] whitespace-pre-wrap`}
+              >
+                {msg.content}
+              </div>
+            ))}
+            <div ref={messagesEndRef} />
           </div>
 
           {/* Input Area */}
@@ -52,8 +133,7 @@ const ChatbotPopup = () => {
                 className="flex-1"
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && message.trim()) {
-                    // Placeholder for future functionality
-                    setMessage("");
+                    handleSend();
                   }
                 }}
               />
@@ -61,17 +141,11 @@ const ChatbotPopup = () => {
                 size="icon"
                 className="shrink-0"
                 disabled={!message.trim()}
-                onClick={() => {
-                  // Placeholder for future functionality
-                  setMessage("");
-                }}
+                onClick={handleSend}
               >
                 <Send className="h-4 w-4" />
               </Button>
             </div>
-            <p className="text-xs text-muted-foreground mt-2 text-center">
-              Chatbot functionality coming soon
-            </p>
           </div>
         </div>
       )}
