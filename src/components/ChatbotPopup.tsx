@@ -46,9 +46,18 @@ const getResponse = (userMessage: string): string => {
   return "I'm sorry, I don't have information about that specific topic yet. Please try asking about clinical vs non-clinical questions, or contact your administrator for more help.";
 };
 
+const TypingIndicator = () => (
+  <div className="bg-card border border-border rounded-lg p-3 max-w-[85%] flex items-center gap-1">
+    <span className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+    <span className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+    <span className="w-2 h-2 bg-muted-foreground/60 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+  </div>
+);
+
 const ChatbotPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 0,
@@ -64,10 +73,10 @@ const ChatbotPopup = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, isTyping]);
 
   const handleSend = () => {
-    if (!message.trim()) return;
+    if (!message.trim() || isTyping) return;
 
     const userMessage: Message = {
       id: messages.length,
@@ -75,14 +84,20 @@ const ChatbotPopup = () => {
       content: message.trim(),
     };
 
-    const assistantResponse: Message = {
-      id: messages.length + 1,
-      role: "assistant",
-      content: getResponse(message.trim()),
-    };
-
-    setMessages((prev) => [...prev, userMessage, assistantResponse]);
+    const responseContent = getResponse(message.trim());
+    setMessages((prev) => [...prev, userMessage]);
     setMessage("");
+    setIsTyping(true);
+
+    setTimeout(() => {
+      const assistantResponse: Message = {
+        id: messages.length + 1,
+        role: "assistant",
+        content: responseContent,
+      };
+      setMessages((prev) => [...prev, assistantResponse]);
+      setIsTyping(false);
+    }, 1500 + Math.random() * 500);
   };
 
   return (
@@ -119,6 +134,7 @@ const ChatbotPopup = () => {
                 {msg.content}
               </div>
             ))}
+            {isTyping && <TypingIndicator />}
             <div ref={messagesEndRef} />
           </div>
 
@@ -131,8 +147,9 @@ const ChatbotPopup = () => {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 className="flex-1"
+                disabled={isTyping}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" && message.trim()) {
+                  if (e.key === "Enter" && message.trim() && !isTyping) {
                     handleSend();
                   }
                 }}
@@ -140,7 +157,7 @@ const ChatbotPopup = () => {
               <Button
                 size="icon"
                 className="shrink-0"
-                disabled={!message.trim()}
+                disabled={!message.trim() || isTyping}
                 onClick={handleSend}
               >
                 <Send className="h-4 w-4" />
