@@ -37,14 +37,14 @@ const getQuestionTypeLabel = (type: Section["questionType"]) => {
   }
 };
 
-const getQuestionTypeBadgeVariant = (type: Section["questionType"]) => {
+const getQuestionTypeBadgeClass = (type: Section["questionType"]) => {
   switch (type) {
     case "non-clinical":
-      return "secondary";
+      return "bg-secondary text-secondary-foreground";
     case "clinical":
-      return "default";
+      return "bg-primary text-primary-foreground";
     case "mixed":
-      return "outline";
+      return "bg-orange-100 text-orange-700 border-orange-200";
   }
 };
 
@@ -78,7 +78,7 @@ const SectionList = ({ onSectionSelect }: SectionListProps) => {
                     <span className="text-sm font-medium text-muted-foreground">
                       Section {section.id}
                     </span>
-                    <Badge variant={getQuestionTypeBadgeVariant(section.questionType)}>
+                    <Badge className={getQuestionTypeBadgeClass(section.questionType)}>
                       {section.questionType === "mixed" ? "Mixed" : section.questionType === "clinical" ? "Clinical" : "Non-clinical"}
                     </Badge>
                   </div>
