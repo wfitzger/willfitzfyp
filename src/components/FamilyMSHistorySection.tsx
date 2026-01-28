@@ -12,7 +12,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Plus, Trash2 } from "lucide-react";
-import InfoTooltip from "./InfoTooltip";
 
 interface FamilyMember {
   id: string;
@@ -67,31 +66,6 @@ const FamilyMSHistorySection = () => {
 
   return (
     <div className="space-y-6">
-      {/* Section Header */}
-      <div className="text-center">
-        <div className="flex items-center justify-center gap-2">
-          <h2 className="text-2xl md:text-3xl font-semibold text-foreground">
-            Section 4: Family MS History
-          </h2>
-          <InfoTooltip>
-            <p className="mb-3">
-              In this section, we are interested in capturing information related
-              to the participant's biological family (to determine the spread of
-              disease across families). Please ensure all relations captured are
-              biological family members and have a confirmed diagnosis of MS.
-            </p>
-            <p>
-              This section should be completed at the first clinical encounter. If
-              not completed, it should be reviewed at the earliest opportunity.
-              Second and subsequent encounters should check that no information
-              has changed.
-            </p>
-          </InfoTooltip>
-        </div>
-        <p className="text-muted-foreground text-sm mt-1">
-          All non-clinical questions
-        </p>
-      </div>
 
       {/* Intro Instructions */}
       <Card className="border-l-4 border-l-primary">
