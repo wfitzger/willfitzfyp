@@ -1,49 +1,72 @@
 
+## AI Chatbot with OpenAI — Implementation Plan
 
-## Summary
-Add a realistic "thinking" delay to the chatbot so it appears to process the user's question before responding, complete with a typing indicator animation.
+### Prerequisites
+- Lovable Cloud is already active (confirmed by existing `LOVABLE_API_KEY` secret)
+- Your new OpenAI API key will be stored securely as `OPENAI_API_KEY`
 
-## What Will Change
+---
 
-### User Experience
-1. When you send a message, you'll first see your message appear
-2. A "typing" indicator with animated dots will appear for 1.5-2 seconds
-3. The actual response will then replace the typing indicator
-4. The input will be disabled while the bot is "thinking" to prevent spam
+### Step 1 — Securely Request Your API Key
+I will use the secure secrets prompt to ask for your OpenAI API key. It will be stored encrypted and only accessible inside the edge function — never in browser code.
 
-### Visual Indicator
-- Three animated bouncing dots will show while the bot is processing
-- The dots will pulse in sequence to simulate typing activity
+---
 
-## Technical Details
+### Step 2 — Create `supabase/config.toml`
+Registers the edge function with `verify_jwt = false` so the chatbot works without requiring users to be logged in:
 
-### State Changes
-- Add `isTyping` state to track when the bot is "thinking"
-- Modify `handleSend` to use `setTimeout` for the delayed response
-
-### Flow
-```text
-User sends message
-       |
-       v
-User message added to chat
-       |
-       v
-isTyping = true (show typing indicator)
-       |
-       v
-Wait 1.5-2 seconds
-       |
-       v
-isTyping = false, add assistant response
+```toml
+[functions.chat]
+verify_jwt = false
 ```
 
-### UI Updates
-- Add a typing indicator component (three animated dots)
-- Disable the send button and input while typing
-- Keep auto-scroll working so the typing indicator stays visible
+---
 
-### Animation
-- CSS keyframe animation for the bouncing dots
-- Staggered animation delay for each dot to create a wave effect
+### Step 3 — Create `supabase/functions/chat/index.ts`
+A backend function that:
+- Handles CORS (required for browser access)
+- Receives the conversation history from the frontend
+- Prepends a **system prompt** with full questionnaire context, including all 15 sections:
+  - Section 1: Index Capsule (non-clinical)
+  - Section 2: Clinical Visit Information (non-clinical)
+  - Section 3: Demographic Information (non-clinical)
+  - Section 4: Family MS History (non-clinical)
+  - Section 5: MS Diagnostic History (mixed)
+  - Section 6: MS Progression Information (mixed)
+  - Section 7: Medication — DMT and Symptom Management (non-clinical)
+  - Section 8: Participant Medical Information (non-clinical)
+  - Section 9: Smoking, Alcohol and Recreational Cannabis Use (non-clinical)
+  - Section 10: Pregnancy (non-clinical)
+  - Section 11: Cervical Screening (non-clinical)
+  - Section 12: HSCT (non-clinical)
+  - Section 13: Clinical Trials/Open label (non-clinical)
+  - Section 14: Cognition and Behaviour Information (mixed)
+  - Section 15: Endpoints and Vital Status (mixed)
+- Calls OpenAI `gpt-4o-mini` with streaming enabled
+- Streams the response back using Server-Sent Events (SSE)
+- Returns clear error messages for invalid key or network failures
 
+---
+
+### Step 4 — Add `react-markdown` Dependency
+Allows AI responses that include bold text, bullet points, and numbered lists to render properly in the chat bubble rather than showing raw `**` and `*` characters.
+
+---
+
+### Step 5 — Update `src/components/ChatbotPopup.tsx`
+- Remove the hardcoded `faqResponses` array and `getResponse` function entirely
+- Replace the fake `setTimeout` delay with a real `fetch` call to the edge function
+- Pass the full conversation history on every request (so the AI remembers context)
+- Implement SSE streaming — tokens appear one-by-one as OpenAI generates them
+- Keep the typing indicator visible until the first token arrives
+- Render AI responses using `react-markdown` instead of plain `<div>` text
+- Disable the input while the AI is responding
+- Show a user-friendly toast error if the API call fails
+
+---
+
+### Files
+- **Create**: `supabase/config.toml`
+- **Create**: `supabase/functions/chat/index.ts`
+- **Edit**: `src/components/ChatbotPopup.tsx`
+- **Edit**: `package.json` (add `react-markdown`)
