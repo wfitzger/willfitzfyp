@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import { MessageCircle, X, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { toast } from "@/hooks/use-toast";
+import ReactMarkdown from "react-markdown";
 
 interface Message {
   id: number;
@@ -9,42 +11,7 @@ interface Message {
   content: string;
 }
 
-const faqResponses: { patterns: string[]; response: string }[] = [
-  {
-    patterns: [
-      "clinical and non-clinical",
-      "clinical vs non-clinical",
-      "difference between clinical and non-clinical",
-      "what is clinical",
-      "what is non-clinical",
-      "non-clinical questions",
-      "clinical questions",
-    ],
-    response: `**Clinical vs non-clinical questions**
-
-In this questionnaire, the terms clinical and non-clinical describe who is qualified to provide the information.
-
-**Clinical questions** are those that require clinical judgement or medical expertise and must be completed by a qualified healthcare professional (e.g. neurologist, MS nurse).
-
-**Non-clinical questions** do not require clinical judgement and can be completed by a non-healthcare professional, such as a researcher. In many cases, this information can be obtained from the patient's medical record and transcribed into the data collection tool.
-
-This distinction helps ensure data is collected accurately and by the appropriate person.`,
-  },
-];
-
-const getResponse = (userMessage: string): string => {
-  const lowerMessage = userMessage.toLowerCase();
-  
-  for (const faq of faqResponses) {
-    for (const pattern of faq.patterns) {
-      if (lowerMessage.includes(pattern.toLowerCase())) {
-        return faq.response;
-      }
-    }
-  }
-  
-  return "I'm sorry, I don't have information about that specific topic yet. Please try asking about clinical vs non-clinical questions, or contact your administrator for more help.";
-};
+const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
 
 const TypingIndicator = () => (
   <div className="bg-card border border-border rounded-lg p-3 max-w-[85%] flex items-center gap-1">
@@ -57,15 +24,17 @@ const TypingIndicator = () => (
 const ChatbotPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
-  const [isTyping, setIsTyping] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 0,
       role: "assistant",
-      content: "👋 Hello! I'm here to help you with the questionnaire.\n\nIf you have any questions about filling in the form, understanding specific fields, or need clarification on medical terminology, feel free to ask!\n\nTry asking: \"What is the difference between clinical and non-clinical questions?\"",
+      content:
+        "👋 Hello! I'm here to help you with the questionnaire.\n\nIf you have any questions about filling in the form, understanding specific fields, or need clarification on medical terminology, feel free to ask!",
     },
   ]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -73,10 +42,10 @@ const ChatbotPopup = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, isTyping]);
+  }, [messages, isStreaming]);
 
-  const handleSend = () => {
-    if (!message.trim() || isTyping) return;
+  const handleSend = async () => {
+    if (!message.trim() || isStreaming) return;
 
     const userMessage: Message = {
       id: messages.length,
@@ -84,20 +53,121 @@ const ChatbotPopup = () => {
       content: message.trim(),
     };
 
-    const responseContent = getResponse(message.trim());
-    setMessages((prev) => [...prev, userMessage]);
+    const updatedMessages = [...messages, userMessage];
+    setMessages(updatedMessages);
     setMessage("");
-    setIsTyping(true);
+    setIsStreaming(true);
 
-    setTimeout(() => {
-      const assistantResponse: Message = {
-        id: messages.length + 1,
-        role: "assistant",
-        content: responseContent,
-      };
-      setMessages((prev) => [...prev, assistantResponse]);
-      setIsTyping(false);
-    }, 1500 + Math.random() * 500);
+    // Prepare conversation history for the API (exclude the welcome message id=0 system-like message)
+    const apiMessages = updatedMessages.map((m) => ({
+      role: m.role,
+      content: m.content,
+    }));
+
+    abortControllerRef.current = new AbortController();
+
+    try {
+      const resp = await fetch(CHAT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({ messages: apiMessages }),
+        signal: abortControllerRef.current.signal,
+      });
+
+      if (!resp.ok || !resp.body) {
+        const errData = await resp.json().catch(() => ({ error: "Unknown error" }));
+        throw new Error(errData.error || `Request failed with status ${resp.status}`);
+      }
+
+      const reader = resp.body.getReader();
+      const decoder = new TextDecoder();
+      let textBuffer = "";
+      let streamDone = false;
+      let assistantContent = "";
+      let assistantId = updatedMessages.length;
+
+      // Add an empty assistant message to fill in as tokens arrive
+      setMessages((prev) => [
+        ...prev,
+        { id: assistantId, role: "assistant", content: "" },
+      ]);
+      setIsStreaming(false); // hide typing indicator once the assistant message exists
+
+      while (!streamDone) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        textBuffer += decoder.decode(value, { stream: true });
+
+        let newlineIndex: number;
+        while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
+          let line = textBuffer.slice(0, newlineIndex);
+          textBuffer = textBuffer.slice(newlineIndex + 1);
+          if (line.endsWith("\r")) line = line.slice(0, -1);
+          if (line.startsWith(":") || line.trim() === "") continue;
+          if (!line.startsWith("data: ")) continue;
+
+          const jsonStr = line.slice(6).trim();
+          if (jsonStr === "[DONE]") {
+            streamDone = true;
+            break;
+          }
+
+          try {
+            const parsed = JSON.parse(jsonStr);
+            const chunk = parsed.choices?.[0]?.delta?.content as string | undefined;
+            if (chunk) {
+              assistantContent += chunk;
+              const captured = assistantContent;
+              setMessages((prev) =>
+                prev.map((m) =>
+                  m.id === assistantId ? { ...m, content: captured } : m
+                )
+              );
+            }
+          } catch {
+            textBuffer = line + "\n" + textBuffer;
+            break;
+          }
+        }
+      }
+
+      // Final flush
+      if (textBuffer.trim()) {
+        for (let raw of textBuffer.split("\n")) {
+          if (!raw) continue;
+          if (raw.endsWith("\r")) raw = raw.slice(0, -1);
+          if (!raw.startsWith("data: ")) continue;
+          const jsonStr = raw.slice(6).trim();
+          if (jsonStr === "[DONE]") continue;
+          try {
+            const parsed = JSON.parse(jsonStr);
+            const chunk = parsed.choices?.[0]?.delta?.content as string | undefined;
+            if (chunk) {
+              assistantContent += chunk;
+              const captured = assistantContent;
+              setMessages((prev) =>
+                prev.map((m) =>
+                  m.id === assistantId ? { ...m, content: captured } : m
+                )
+              );
+            }
+          } catch { /* ignore */ }
+        }
+      }
+    } catch (e: unknown) {
+      if (e instanceof Error && e.name === "AbortError") return;
+      console.error("Chat error:", e);
+      setIsStreaming(false);
+      toast({
+        title: "Something went wrong",
+        description:
+          e instanceof Error ? e.message : "Failed to get a response. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -129,12 +199,18 @@ const ChatbotPopup = () => {
                   msg.role === "user"
                     ? "ml-auto bg-primary text-primary-foreground"
                     : "bg-card border border-border text-foreground"
-                } rounded-lg p-3 text-sm max-w-[85%] whitespace-pre-wrap`}
+                } rounded-lg p-3 text-sm max-w-[85%]`}
               >
-                {msg.content}
+                {msg.role === "assistant" ? (
+                  <div className="prose prose-sm max-w-none dark:prose-invert prose-p:my-1 prose-ul:my-1 prose-li:my-0.5">
+                    <ReactMarkdown>{msg.content}</ReactMarkdown>
+                  </div>
+                ) : (
+                  <span className="whitespace-pre-wrap">{msg.content}</span>
+                )}
               </div>
             ))}
-            {isTyping && <TypingIndicator />}
+            {isStreaming && <TypingIndicator />}
             <div ref={messagesEndRef} />
           </div>
 
@@ -147,9 +223,9 @@ const ChatbotPopup = () => {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 className="flex-1"
-                disabled={isTyping}
+                disabled={isStreaming}
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" && message.trim() && !isTyping) {
+                  if (e.key === "Enter" && message.trim() && !isStreaming) {
                     handleSend();
                   }
                 }}
@@ -157,7 +233,7 @@ const ChatbotPopup = () => {
               <Button
                 size="icon"
                 className="shrink-0"
-                disabled={!message.trim() || isTyping}
+                disabled={!message.trim() || isStreaming}
                 onClick={handleSend}
               >
                 <Send className="h-4 w-4" />
