@@ -11,8 +11,7 @@ interface Message {
   content: string;
 }
 
-const SUPABASE_URL = `https://${import.meta.env.VITE_SUPABASE_PROJECT_ID}.supabase.co`;
-const CHAT_URL = `${SUPABASE_URL}/functions/v1/chat`;
+const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`;
 
 const TypingIndicator = () => (
   <div className="bg-card border border-border rounded-lg p-3 max-w-[85%] flex items-center gap-1">
@@ -72,7 +71,7 @@ const ChatbotPopup = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
         },
         body: JSON.stringify({ messages: apiMessages }),
         signal: abortControllerRef.current.signal,
