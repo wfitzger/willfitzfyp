@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import SectionList, { sections } from "./SectionList";
 import ClinicalVisitSection from "./sections/ClinicalVisitSection";
 import FamilyMSHistorySection from "./FamilyMSHistorySection";
+import MSProgressionSection from "./sections/MSProgressionSection";
 import PlaceholderSection from "./sections/PlaceholderSection";
 import ChatbotPopup from "./ChatbotPopup";
 import InfoTooltip from "./InfoTooltip";
@@ -40,6 +41,8 @@ const ClinicalQuestionnaire = () => {
         return <ClinicalVisitSection />;
       case 4:
         return <FamilyMSHistorySection />;
+      case 6:
+        return <MSProgressionSection />;
       default:
         return (
           <PlaceholderSection
@@ -76,37 +79,17 @@ const ClinicalQuestionnaire = () => {
                   </h1>
                   {activeSection === 2 && (
                     <InfoTooltip>
-                      <p className="mb-3">
-                        Data is collected around a clinical encounter. An encounter is
-                        any interaction between a patient and a healthcare provider
-                        that involves delivering healthcare services/generating data.
-                        These encounters can vary in purpose, setting, and duration,
-                        but they all aim to address a patient's health need and
-                        generate data.
-                      </p>
-                      <p>
-                        <strong>Note:</strong> We need to consider the length of an
-                        encounter, i.e., if the patient sees Team and is referred for
-                        and then has an MRI, is this one or two encounters? This is
-                        important as it will alert the data collector to initiate a
-                        new data collection session.
-                      </p>
+                      <p>An encounter is any interaction between a patient and a healthcare provider. Complete this section before entering any data.</p>
                     </InfoTooltip>
                   )}
                   {activeSection === 4 && (
                     <InfoTooltip>
-                      <p className="mb-3">
-                        In this section, we are interested in capturing information related
-                        to the participant's biological family (to determine the spread of
-                        disease across families). Please ensure all relations captured are
-                        biological family members and have a confirmed diagnosis of MS.
-                      </p>
-                      <p>
-                        This section should be completed at the first clinical encounter. If
-                        not completed, it should be reviewed at the earliest opportunity.
-                        Second and subsequent encounters should check that no information
-                        has changed.
-                      </p>
+                      <p>Captures <strong>biological family</strong> members with a <strong>confirmed MS diagnosis</strong> to determine disease spread across families.</p>
+                    </InfoTooltip>
+                  )}
+                  {activeSection === 6 && (
+                    <InfoTooltip>
+                      <p>Tracks disease progression through tests (MRI, biomarkers, monitoring tools). Complete from the <strong>second encounter onwards</strong>. Contains clinical questions requiring a healthcare professional.</p>
                     </InfoTooltip>
                   )}
                 </div>

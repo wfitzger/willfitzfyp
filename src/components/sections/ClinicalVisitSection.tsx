@@ -58,17 +58,7 @@ const ClinicalVisitSection = () => {
                 a. Encounter
               </Label>
               <InfoTooltip>
-                <p className="mb-3">
-                  Data collection is limited to patients previously diagnosed
-                  at the location less than 3 years. By clicking any option in
-                  this section, you are confirming the patient has been
-                  diagnosed less than 3 years ago.
-                </p>
-                <p>
-                  We also want to know whether this encounter is their first
-                  one with a Precision MS researcher or their
-                  second/subsequent one.
-                </p>
+                <p>Select whether this is the participant's first or subsequent encounter with Precision MS. Patients must have been diagnosed within the last 3 years.</p>
               </InfoTooltip>
             </div>
             <RadioGroup
@@ -81,13 +71,7 @@ const ClinicalVisitSection = () => {
                 value="first"
                 label="First P-MS encounter (limited to patients previously diagnosed at the location less than 3 years)"
                 infoContent={
-                  <p>
-                    If First P-MS encounter option is clicked, it means data
-                    collected related to the participants' first encounter
-                    with Precision MS research. It is important to know that
-                    data collected in the first encounter will provide a
-                    baseline for participants.
-                  </p>
+                  <p>First encounter data provides the participant's baseline.</p>
                 }
               />
               <QuestionOption
@@ -95,13 +79,7 @@ const ClinicalVisitSection = () => {
                 value="second"
                 label="Second/subsequent P-MS encounter (limited to patients previously registered with Precision-MS)"
                 infoContent={
-                  <p>
-                    If Second/subsequent P-MS encounter option is clicked, it
-                    means data collected related to the participant's second
-                    or subsequent encounter with Precision MS research. It is
-                    important to know that data collected in the second
-                    encounter will establish disease progression.
-                  </p>
+                  <p>Subsequent encounters track disease progression over time.</p>
                 }
               />
               <QuestionOption
@@ -109,13 +87,7 @@ const ClinicalVisitSection = () => {
                 value="other"
                 label="Other (please specify)"
                 infoContent={
-                  <p>
-                    If Other option is clicked, it allows data collectors to
-                    include free text to describe the type of encounter that
-                    may not be captured in the previous two options. These
-                    options are reviewed by the Precision MS team and included
-                    in future drop-down options.
-                  </p>
+                  <p>Free text for encounter types not listed above.</p>
                 }
                 hasOtherInput
                 isSelected={encounter === "other"}
