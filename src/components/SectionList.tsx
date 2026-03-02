@@ -92,7 +92,7 @@ const SectionList = ({ onSectionSelect }: SectionListProps) => {
                       </Badge>
                       {!isImplemented && (
                         <Badge variant="outline" className="text-xs text-muted-foreground border-muted-foreground/30">
-                          Not started
+                          In development
                         </Badge>
                       )}
                     </div>
