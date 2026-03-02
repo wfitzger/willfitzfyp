@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import SectionList, { sections } from "./SectionList";
@@ -11,6 +11,10 @@ import InfoTooltip from "./InfoTooltip";
 
 const ClinicalQuestionnaire = () => {
   const [activeSection, setActiveSection] = useState<number | null>(null);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [activeSection]);
 
   const handleSectionSelect = (sectionId: number) => {
     setActiveSection(sectionId);
@@ -79,17 +83,17 @@ const ClinicalQuestionnaire = () => {
                   </h1>
                   {activeSection === 2 && (
                     <InfoTooltip>
-                      <p>An encounter is any interaction between a patient and a healthcare provider. Complete this section before entering any data.</p>
+                      <p>Complete before entering any data. Records encounter type, clinic type and who the participant was seen by.</p>
                     </InfoTooltip>
                   )}
                   {activeSection === 4 && (
                     <InfoTooltip>
-                      <p>Captures <strong>biological family</strong> members with a <strong>confirmed MS diagnosis</strong> to determine disease spread across families.</p>
+                      <p>Records biological family members with a confirmed MS diagnosis to determine spread of disease across families.</p>
                     </InfoTooltip>
                   )}
                   {activeSection === 6 && (
                     <InfoTooltip>
-                      <p>Tracks disease progression through tests (MRI, biomarkers, monitoring tools). Complete from the <strong>second encounter onwards</strong>. Contains clinical questions requiring a healthcare professional.</p>
+                      <p>Tracks disease progression via MRI, biomarkers, and monitoring tools. Complete from the second encounter onwards. Contains clinical questions.</p>
                     </InfoTooltip>
                   )}
                 </div>

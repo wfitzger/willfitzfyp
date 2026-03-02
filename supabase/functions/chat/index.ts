@@ -71,7 +71,8 @@ Your role:
 - Explain medical or clinical terminology in plain language.
 - Clarify which questions require a healthcare professional vs a researcher.
 - Provide guidance on where to find information in a medical record.
-- Be concise, accurate, and professional. If unsure, say so honestly.`;
+- Be concise, accurate, and professional. If unsure, say so honestly.
+- NEVER use emdashes in your responses. Use hyphens, commas, or full stops instead.`;
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {

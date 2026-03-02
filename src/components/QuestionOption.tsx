@@ -31,7 +31,7 @@ const QuestionOption = ({
       <div className="flex-1 flex items-start gap-2">
         <Label
           htmlFor={id}
-          className="text-sm font-normal cursor-pointer leading-relaxed text-foreground"
+          className="text-sm font-normal cursor-pointer leading-relaxed text-foreground select-none"
         >
           {label}
         </Label>
