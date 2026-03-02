@@ -26,6 +26,9 @@ export const sections: Section[] = [
   { id: 15, title: "Endpoints and Vital Status", questionType: "mixed" },
 ];
 
+// Sections that have actual form content implemented
+const implementedSections = new Set([2, 4, 6]);
+
 const getQuestionTypeLabel = (type: Section["questionType"]) => {
   switch (type) {
     case "non-clinical":
@@ -65,35 +68,47 @@ const SectionList = ({ onSectionSelect }: SectionListProps) => {
       </div>
 
       <div className="space-y-2">
-        {sections.map((section) => (
-          <Card
-            key={section.id}
-            className="cursor-pointer transition-all hover:shadow-md hover:border-primary/50 group"
-            onClick={() => onSectionSelect(section.id)}
-          >
-            <CardContent className="py-4 px-5">
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-3 mb-1">
-                    <span className="text-sm font-medium text-muted-foreground">
-                      Section {section.id}
-                    </span>
-                    <Badge className={getQuestionTypeBadgeClass(section.questionType)}>
-                      {section.questionType === "mixed" ? "Mixed" : section.questionType === "clinical" ? "Clinical" : "Non-clinical"}
-                    </Badge>
+        {sections.map((section) => {
+          const isImplemented = implementedSections.has(section.id);
+          return (
+            <Card
+              key={section.id}
+              className={`cursor-pointer transition-all group ${
+                isImplemented
+                  ? "hover:shadow-md hover:border-primary/50"
+                  : "opacity-50 hover:opacity-70 hover:shadow-sm"
+              }`}
+              onClick={() => onSectionSelect(section.id)}
+            >
+              <CardContent className="py-4 px-5">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-3 mb-1">
+                      <span className="text-sm font-medium text-muted-foreground">
+                        Section {section.id}
+                      </span>
+                      <Badge className={getQuestionTypeBadgeClass(section.questionType)}>
+                        {section.questionType === "mixed" ? "Mixed" : section.questionType === "clinical" ? "Clinical" : "Non-clinical"}
+                      </Badge>
+                      {!isImplemented && (
+                        <Badge variant="outline" className="text-xs text-muted-foreground border-muted-foreground/30">
+                          Not started
+                        </Badge>
+                      )}
+                    </div>
+                    <h3 className={`text-base font-medium truncate ${isImplemented ? "text-foreground" : "text-muted-foreground"}`}>
+                      {section.title}
+                    </h3>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      {getQuestionTypeLabel(section.questionType)}
+                    </p>
                   </div>
-                  <h3 className="text-base font-medium text-foreground truncate">
-                    {section.title}
-                  </h3>
-                  <p className="text-xs text-muted-foreground mt-0.5">
-                    {getQuestionTypeLabel(section.questionType)}
-                  </p>
+                  <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
                 </div>
-                <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
     </div>
   );
