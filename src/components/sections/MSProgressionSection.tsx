@@ -52,13 +52,11 @@ const emptyMRI = (): MRITestState => ({ ...emptyTest(), contrast: "" });
 const emptyScoredTest = (): ScoredTestState => ({ ...emptyTest(), score: "", performedBy: "" });
 const emptyT25FW = (): T25FWState => ({ ...emptyTest(), scoreTime1: "", scoreTime2: "", performedBy1: "", performedBy2: "" });
 
-// Options that appear when test WAS performed (Yes)
 const yesStatusOptions: { value: TestStatus; label: string }[] = [
   { value: "result-available", label: "Yes, test performed and result available" },
   { value: "result-not-available", label: "Yes, test performed, but result not currently available" },
 ];
 
-// Options that appear when test was NOT performed (No)
 const noStatusOptions: { value: TestStatus; label: string }[] = [
   { value: "not-requested", label: "No, test not requested" },
   { value: "unaware", label: "Participant unaware if test performed" },
@@ -150,6 +148,8 @@ const ClinicalBadge = () => (
 );
 
 const MSProgressionSection = () => {
+  const [isSubsequentVisit, setIsSubsequentVisit] = useState("");
+
   const [testsPerformed, setTestsPerformed] = useState("");
   const [testsPerformedDetail, setTestsPerformedDetail] = useState("");
   const [testsPerformedFollowUp, setTestsPerformedFollowUp] = useState("");
@@ -157,7 +157,6 @@ const MSProgressionSection = () => {
   const [infoSourceYes, setInfoSourceYes] = useState("");
   const [infoSourceNo, setInfoSourceNo] = useState("");
 
-  // MRI states
   const [mriBrain, setMriBrain] = useState<MRITestState>(emptyMRI());
   const [mriCSpine, setMriCSpine] = useState<MRITestState>(emptyMRI());
   const [mriTSpine, setMriTSpine] = useState<MRITestState>(emptyMRI());
@@ -167,13 +166,11 @@ const MSProgressionSection = () => {
   const [mriTSpinePerformed, setMriTSpinePerformed] = useState("");
   const [mriLSpinePerformed, setMriLSpinePerformed] = useState("");
 
-  // Biomarkers
   const [neurofilaments, setNeurofilaments] = useState<TestState>(emptyTest());
   const [neuroPerformed, setNeuroPerformed] = useState("");
   const [bioOtherPerformed, setBioOtherPerformed] = useState("");
   const [biomarkersOther, setBiomarkersOther] = useState<ScoredTestState>(emptyScoredTest());
 
-  // Monitoring tools
   const [t25fw, setT25fw] = useState<T25FWState>(emptyT25FW());
   const [t25fwPerformed, setT25fwPerformed] = useState("");
   const [edss, setEdss] = useState<ScoredTestState>(emptyScoredTest());
@@ -185,8 +182,12 @@ const MSProgressionSection = () => {
   const [hads, setHads] = useState<ScoredTestState>(emptyScoredTest());
   const [hadsPerformed, setHadsPerformed] = useState("");
 
-  // Other tests
-  const [otherTests, setOtherTests] = useState("");
+  const [otherTestPerformed, setOtherTestPerformed] = useState("");
+  const [otherTestDate, setOtherTestDate] = useState("");
+  const [otherTestType, setOtherTestType] = useState("");
+  const [otherTestScore, setOtherTestScore] = useState("");
+  const [otherTestPerformedBy, setOtherTestPerformedBy] = useState("");
+  const [otherTestFollowUpReason, setOtherTestFollowUpReason] = useState("");
 
   const updateMRI = (setter: React.Dispatch<React.SetStateAction<MRITestState>>, field: keyof MRITestState, value: string) => {
     setter((prev) => ({ ...prev, [field]: value }));
@@ -319,331 +320,402 @@ const MSProgressionSection = () => {
 
   return (
     <div className="space-y-6">
-      {/* Intro */}
+      {/* Info card */}
       <Card className="border-l-4 border-l-primary">
         <CardContent className="pt-6">
-          <p className="text-sm text-foreground leading-relaxed mb-2">
-            MS Progression tests establish the rate of disease progression. This section should be completed from the <strong>second encounter onwards</strong>.
-          </p>
-          <ul className="text-sm text-muted-foreground list-disc list-inside space-y-1">
-            <li><strong>First visit:</strong> ask all questions</li>
-            <li><strong>Second or subsequent visit:</strong> ask all questions as answers may change over time</li>
-          </ul>
-        </CardContent>
-      </Card>
-
-      {/* 6a. MS Progression Tests */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg font-medium text-foreground flex items-center">
-            6a. MS Progression Tests
-            <ClinicalBadge />
+          <div className="flex items-start gap-2 mb-3">
+            <p className="text-sm text-foreground leading-relaxed">
+              This section does not need to be filled on the first encounter.
+            </p>
             <InfoTooltip>
-              <p>Consider if tests were performed. A researcher can follow up with the medical record.</p>
+              <div className="space-y-2">
+                <p>During this encounter, the participant may have undergone tests related to disease progression. If applicable, complete both the MS Diagnostic Tests and MS Progression Tests sections for the initial encounter.</p>
+                <p>MS Progression tests aim to establish the rate of disease progression for the participant.</p>
+                <p>This section should be completed during the participant's second and subsequent encounters. If it is not completed at that time, it should be reviewed and completed as soon as possible.</p>
+              </div>
             </InfoTooltip>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-8">
-          {/* Were tests performed? */}
-          <div className="space-y-3">
-            <Label className="text-base font-medium text-foreground">
-              For this encounter, were MS Progression Tests performed?
-            </Label>
-            <RadioGroup value={testsPerformed} onValueChange={(v) => { setTestsPerformed(v); setTestsPerformedDetail(""); }} className="pl-4 space-y-2">
-              <div className="flex items-center gap-3">
-                <RadioGroupItem value="yes" id="prog-yes" />
-                <Label htmlFor="prog-yes" className="text-sm font-normal cursor-pointer select-none">Yes</Label>
-              </div>
-              <div className="flex items-center gap-3">
-                <RadioGroupItem value="no" id="prog-no" />
-                <Label htmlFor="prog-no" className="text-sm font-normal cursor-pointer select-none">No</Label>
-              </div>
-            </RadioGroup>
           </div>
-
-          {detailOptions.length > 0 && (
-            <div className="space-y-4 pl-4">
-              <Label className="text-sm font-medium text-foreground">
-                {testsPerformed === "yes" ? "MS Progression tests were performed for this encounter:" : "Details:"}
-              </Label>
-              <RadioGroup value={testsPerformedDetail} onValueChange={setTestsPerformedDetail} className="space-y-2">
-                {detailOptions.map((opt) => (
-                  <div key={opt.value}>
-                    <div className="flex items-center gap-3 py-1">
-                      <RadioGroupItem value={opt.value} id={`detail-${opt.value}`} />
-                      <Label htmlFor={`detail-${opt.value}`} className="text-sm font-normal cursor-pointer select-none">{opt.label}</Label>
-                    </div>
-                    {opt.value === "follow-up" && testsPerformedDetail === "follow-up" && (
-                      <div className="pl-8 pt-1">
-                        <Input value={testsPerformedFollowUp} onChange={(e) => setTestsPerformedFollowUp(e.target.value)} placeholder="Include reason for follow up..." className="h-8 text-sm" />
-                      </div>
-                    )}
-                    {opt.value === "other" && testsPerformedDetail === "other" && (
-                      <div className="pl-8 pt-1">
-                        <Input value={testsPerformedOther} onChange={(e) => setTestsPerformedOther(e.target.value)} placeholder="Please specify..." className="h-8 text-sm" />
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </RadioGroup>
-            </div>
-          )}
-
-          {/* Information source */}
-          {testsPerformed === "yes" && (
-            <div className="space-y-3">
-              <Label className="text-sm font-medium text-foreground">Information was obtained from:</Label>
-              <RadioGroup value={infoSourceYes} onValueChange={setInfoSourceYes} className="flex gap-4 pl-4">
-                <div className="flex items-center gap-2">
-                  <RadioGroupItem value="participant" id="src-yes-participant" />
-                  <Label htmlFor="src-yes-participant" className="text-sm font-normal cursor-pointer select-none">Participant recall</Label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <RadioGroupItem value="record" id="src-yes-record" />
-                  <Label htmlFor="src-yes-record" className="text-sm font-normal cursor-pointer select-none">Healthcare record</Label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <RadioGroupItem value="other" id="src-yes-other" />
-                  <Label htmlFor="src-yes-other" className="text-sm font-normal cursor-pointer select-none">Other</Label>
-                </div>
-              </RadioGroup>
-            </div>
-          )}
-
-          {testsPerformed === "no" && (
-            <div className="space-y-3">
-              <Label className="text-sm font-medium text-foreground">Information was obtained from:</Label>
-              <RadioGroup value={infoSourceNo} onValueChange={setInfoSourceNo} className="flex gap-4 pl-4">
-                <div className="flex items-center gap-2">
-                  <RadioGroupItem value="participant" id="src-no-participant" />
-                  <Label htmlFor="src-no-participant" className="text-sm font-normal cursor-pointer select-none">Participant recall</Label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <RadioGroupItem value="record" id="src-no-record" />
-                  <Label htmlFor="src-no-record" className="text-sm font-normal cursor-pointer select-none">Healthcare record</Label>
-                </div>
-                <div className="flex items-center gap-2">
-                  <RadioGroupItem value="other" id="src-no-other" />
-                  <Label htmlFor="src-no-other" className="text-sm font-normal cursor-pointer select-none">Other</Label>
-                </div>
-              </RadioGroup>
-            </div>
-          )}
         </CardContent>
       </Card>
 
-      {/* MRI Section */}
+      {/* Gate question: is this a second or subsequent visit? */}
       <Card>
-        <CardHeader>
-          <CardTitle className="text-lg font-medium text-foreground">a. MRI</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {renderMRIBlock("Brain", mriBrain, setMriBrain, mriBrainPerformed, setMriBrainPerformed, "mri-brain")}
-          {renderMRIBlock("C-Spine", mriCSpine, setMriCSpine, mriCSpinePerformed, setMriCSpinePerformed, "mri-cspine",
-            <p>Cervical Spine (neck region). MRI of the C-Spine checks for lesions in the upper spinal cord.</p>
-          )}
-          {renderMRIBlock("T-Spine", mriTSpine, setMriTSpine, mriTSpinePerformed, setMriTSpinePerformed, "mri-tspine",
-            <p>Thoracic Spine (mid-back region). MRI of the T-Spine checks for lesions in the mid spinal cord.</p>
-          )}
-          {renderMRIBlock("L-Spine", mriLSpine, setMriLSpine, mriLSpinePerformed, setMriLSpinePerformed, "mri-lspine",
-            <p>Lumbar Spine (lower back region). MRI of the L-Spine checks for lesions in the lower spinal cord.</p>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Biomarkers */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg font-medium text-foreground flex items-center gap-2">
-            b. Biomarkers
-            <InfoTooltip>
-              <p>Biomarkers are measurable indicators (e.g. proteins in blood or spinal fluid) used to detect nerve damage or disease activity.</p>
-            </InfoTooltip>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-8">
-          {/* Neurofilaments */}
-          <div className="space-y-4">
+        <CardContent className="pt-6 space-y-4">
+          <Label className="text-base font-medium text-foreground">
+            Is this the second or subsequent visit for this participant?
+          </Label>
+          <RadioGroup value={isSubsequentVisit} onValueChange={setIsSubsequentVisit} className="flex gap-4 pl-4">
             <div className="flex items-center gap-2">
-              <Label className="text-base font-medium text-foreground">Were Neurofilament tests performed?</Label>
-              <InfoTooltip><p>Neurofilaments are proteins found in neurons. Elevated levels indicate nerve damage.</p></InfoTooltip>
+              <RadioGroupItem value="yes" id="subsequent-yes" />
+              <Label htmlFor="subsequent-yes" className="text-sm font-normal cursor-pointer select-none">Yes</Label>
             </div>
-            <ConditionalTestStatus
-              testPerformed={neuroPerformed}
-              onTestPerformedChange={setNeuroPerformed}
-              value={neurofilaments.status}
-              onChange={(v) => setNeurofilaments((p) => ({ ...p, status: v }))}
-              dateValue={neurofilaments.date}
-              onDateChange={(v) => setNeurofilaments((p) => ({ ...p, date: v }))}
-              followUpValue={neurofilaments.followUpReason}
-              onFollowUpChange={(v) => setNeurofilaments((p) => ({ ...p, followUpReason: v }))}
-              otherValue={neurofilaments.otherSpecify}
-              onOtherChange={(v) => setNeurofilaments((p) => ({ ...p, otherSpecify: v }))}
-              idPrefix="neuro"
-            />
-          </div>
-
-          {/* Other Biomarkers - Clinical */}
-          <div className="space-y-4">
-            <div className="flex items-center">
-              <Label className="text-base font-medium text-foreground">Were other biomarker tests performed?</Label>
-              <ClinicalBadge />
+            <div className="flex items-center gap-2">
+              <RadioGroupItem value="no" id="subsequent-no" />
+              <Label htmlFor="subsequent-no" className="text-sm font-normal cursor-pointer select-none">No</Label>
             </div>
-            <RadioGroup value={bioOtherPerformed} onValueChange={(v) => { setBioOtherPerformed(v); setBiomarkersOther(emptyScoredTest()); }} className="flex gap-4 pl-4">
-              <div className="flex items-center gap-2">
-                <RadioGroupItem value="yes" id="bio-other-tp-yes" />
-                <Label htmlFor="bio-other-tp-yes" className="text-sm font-normal cursor-pointer select-none">Yes</Label>
-              </div>
-              <div className="flex items-center gap-2">
-                <RadioGroupItem value="no" id="bio-other-tp-no" />
-                <Label htmlFor="bio-other-tp-no" className="text-sm font-normal cursor-pointer select-none">No</Label>
-              </div>
-              <div className="flex items-center gap-2">
-                <RadioGroupItem value="unknown" id="bio-other-tp-unk" />
-                <Label htmlFor="bio-other-tp-unk" className="text-sm font-normal cursor-pointer select-none">Unknown</Label>
-              </div>
-            </RadioGroup>
+          </RadioGroup>
 
-            {bioOtherPerformed === "yes" && (
-              <div className="space-y-3 p-3 bg-red-50 rounded-lg border-2 border-red-300">
-                <div className="flex items-center gap-1">
-                  <span className="text-xs font-semibold text-red-700">Clinical data</span>
+          {isSubsequentVisit === "no" && (
+            <p className="text-sm text-muted-foreground italic pl-4">
+              This section is for second and subsequent encounters only. No further questions are required for the first visit.
+            </p>
+          )}
+        </CardContent>
+      </Card>
+
+      {isSubsequentVisit === "yes" && (
+        <>
+          {/* MS Progression Tests */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg font-medium text-foreground flex items-center">
+                For this encounter, were MS Progression Tests performed?
+                <InfoTooltip>
+                  <p>Consider if tests were performed. A researcher can follow up with the medical record.</p>
+                </InfoTooltip>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-8">
+              <div className="space-y-3">
+                <RadioGroup value={testsPerformed} onValueChange={(v) => { setTestsPerformed(v); setTestsPerformedDetail(""); }} className="pl-4 space-y-2">
+                  <div className="flex items-center gap-3">
+                    <RadioGroupItem value="yes" id="prog-yes" />
+                    <Label htmlFor="prog-yes" className="text-sm font-normal cursor-pointer select-none">Yes</Label>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <RadioGroupItem value="no" id="prog-no" />
+                    <Label htmlFor="prog-no" className="text-sm font-normal cursor-pointer select-none">No</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              {detailOptions.length > 0 && (
+                <div className="space-y-4 pl-4">
+                  <Label className="text-sm font-medium text-foreground">
+                    {testsPerformed === "yes" ? "MS Progression tests were performed for this encounter:" : "Details:"}
+                  </Label>
+                  <RadioGroup value={testsPerformedDetail} onValueChange={setTestsPerformedDetail} className="space-y-2">
+                    {detailOptions.map((opt) => (
+                      <div key={opt.value}>
+                        <div className="flex items-center gap-3 py-1">
+                          <RadioGroupItem value={opt.value} id={`detail-${opt.value}`} />
+                          <Label htmlFor={`detail-${opt.value}`} className="text-sm font-normal cursor-pointer select-none">{opt.label}</Label>
+                        </div>
+                        {opt.value === "follow-up" && testsPerformedDetail === "follow-up" && (
+                          <div className="pl-8 pt-1">
+                            <Input value={testsPerformedFollowUp} onChange={(e) => setTestsPerformedFollowUp(e.target.value)} placeholder="Include reason for follow up..." className="h-8 text-sm" />
+                          </div>
+                        )}
+                        {opt.value === "other" && testsPerformedDetail === "other" && (
+                          <div className="pl-8 pt-1">
+                            <Input value={testsPerformedOther} onChange={(e) => setTestsPerformedOther(e.target.value)} placeholder="Please specify..." className="h-8 text-sm" />
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </RadioGroup>
+                </div>
+              )}
+
+              {testsPerformed === "yes" && (
+                <div className="space-y-3">
+                  <Label className="text-sm font-medium text-foreground">Information was obtained from:</Label>
+                  <RadioGroup value={infoSourceYes} onValueChange={setInfoSourceYes} className="flex gap-4 pl-4">
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="participant" id="src-yes-participant" />
+                      <Label htmlFor="src-yes-participant" className="text-sm font-normal cursor-pointer select-none">Participant recall</Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="record" id="src-yes-record" />
+                      <Label htmlFor="src-yes-record" className="text-sm font-normal cursor-pointer select-none">Healthcare record</Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="other" id="src-yes-other" />
+                      <Label htmlFor="src-yes-other" className="text-sm font-normal cursor-pointer select-none">Other</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+              )}
+
+              {testsPerformed === "no" && (
+                <div className="space-y-3">
+                  <Label className="text-sm font-medium text-foreground">Information was obtained from:</Label>
+                  <RadioGroup value={infoSourceNo} onValueChange={setInfoSourceNo} className="flex gap-4 pl-4">
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="participant" id="src-no-participant" />
+                      <Label htmlFor="src-no-participant" className="text-sm font-normal cursor-pointer select-none">Participant recall</Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="record" id="src-no-record" />
+                      <Label htmlFor="src-no-record" className="text-sm font-normal cursor-pointer select-none">Healthcare record</Label>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <RadioGroupItem value="other" id="src-no-other" />
+                      <Label htmlFor="src-no-other" className="text-sm font-normal cursor-pointer select-none">Other</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* MRI Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg font-medium text-foreground">a. MRI</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {renderMRIBlock("Brain", mriBrain, setMriBrain, mriBrainPerformed, setMriBrainPerformed, "mri-brain")}
+              {renderMRIBlock("C-Spine", mriCSpine, setMriCSpine, mriCSpinePerformed, setMriCSpinePerformed, "mri-cspine",
+                <p>Cervical Spine (neck region). MRI of the C-Spine checks for lesions in the upper spinal cord.</p>
+              )}
+              {renderMRIBlock("T-Spine", mriTSpine, setMriTSpine, mriTSpinePerformed, setMriTSpinePerformed, "mri-tspine",
+                <p>Thoracic Spine (mid-back region). MRI of the T-Spine checks for lesions in the mid spinal cord.</p>
+              )}
+              {renderMRIBlock("L-Spine", mriLSpine, setMriLSpine, mriLSpinePerformed, setMriLSpinePerformed, "mri-lspine",
+                <p>Lumbar Spine (lower back region). MRI of the L-Spine checks for lesions in the lower spinal cord.</p>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Biomarkers */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg font-medium text-foreground flex items-center gap-2">
+                b. Biomarkers
+                <InfoTooltip>
+                  <p>Biomarkers are measurable indicators (e.g. proteins in blood or spinal fluid) used to detect nerve damage or disease activity.</p>
+                </InfoTooltip>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-8">
+              {/* Neurofilaments */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <Label className="text-base font-medium text-foreground">Were Neurofilament tests performed?</Label>
+                  <InfoTooltip><p>Neurofilaments are proteins found in neurons. Elevated levels indicate nerve damage.</p></InfoTooltip>
+                </div>
+                <ConditionalTestStatus
+                  testPerformed={neuroPerformed}
+                  onTestPerformedChange={setNeuroPerformed}
+                  value={neurofilaments.status}
+                  onChange={(v) => setNeurofilaments((p) => ({ ...p, status: v }))}
+                  dateValue={neurofilaments.date}
+                  onDateChange={(v) => setNeurofilaments((p) => ({ ...p, date: v }))}
+                  followUpValue={neurofilaments.followUpReason}
+                  onFollowUpChange={(v) => setNeurofilaments((p) => ({ ...p, followUpReason: v }))}
+                  otherValue={neurofilaments.otherSpecify}
+                  onOtherChange={(v) => setNeurofilaments((p) => ({ ...p, otherSpecify: v }))}
+                  idPrefix="neuro"
+                />
+              </div>
+
+              {/* Other Biomarkers - Clinical */}
+              <div className="space-y-4">
+                <div className="flex items-center">
+                  <Label className="text-base font-medium text-foreground">Were other biomarker tests performed?</Label>
                   <ClinicalBadge />
                 </div>
-                <div className="space-y-2">
-                  <Label className="text-xs text-muted-foreground">Specify biomarker:</Label>
-                  <Input value={biomarkersOther.otherSpecify} onChange={(e) => updateScored(setBiomarkersOther, "otherSpecify", e.target.value)} placeholder="Specify biomarker..." className="h-8 text-sm" />
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-xs text-muted-foreground">Date performed:</Label>
-                  <Input type="date" value={biomarkersOther.date} onChange={(e) => updateScored(setBiomarkersOther, "date", e.target.value)} className="w-48 h-8 text-sm" />
-                </div>
-              </div>
-            )}
+                <RadioGroup value={bioOtherPerformed} onValueChange={(v) => { setBioOtherPerformed(v); setBiomarkersOther(emptyScoredTest()); }} className="flex gap-4 pl-4">
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="yes" id="bio-other-tp-yes" />
+                    <Label htmlFor="bio-other-tp-yes" className="text-sm font-normal cursor-pointer select-none">Yes</Label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="no" id="bio-other-tp-no" />
+                    <Label htmlFor="bio-other-tp-no" className="text-sm font-normal cursor-pointer select-none">No</Label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <RadioGroupItem value="unknown" id="bio-other-tp-unk" />
+                    <Label htmlFor="bio-other-tp-unk" className="text-sm font-normal cursor-pointer select-none">Unknown</Label>
+                  </div>
+                </RadioGroup>
 
-            {bioOtherPerformed === "no" && (
-              <RadioGroup value={biomarkersOther.status} onValueChange={(v) => updateScored(setBiomarkersOther, "status", v)} className="pl-8 space-y-2">
-                <div className="flex items-center gap-3">
-                  <RadioGroupItem value="not-requested" id="bio-other-nr" />
-                  <Label htmlFor="bio-other-nr" className="text-sm font-normal cursor-pointer select-none">No, test not requested</Label>
-                </div>
-                <div className="flex items-center gap-3">
-                  <RadioGroupItem value="follow-up" id="bio-other-fu" />
-                  <Label htmlFor="bio-other-fu" className="text-sm font-normal cursor-pointer select-none">Data collector to follow up</Label>
-                </div>
-                {biomarkersOther.status === "follow-up" && (
-                  <div className="pl-8">
-                    <Input value={biomarkersOther.followUpReason} onChange={(e) => updateScored(setBiomarkersOther, "followUpReason", e.target.value)} placeholder="Reason for follow up..." className="h-8 text-sm" />
+                {bioOtherPerformed === "yes" && (
+                  <div className="space-y-4 p-4 bg-red-50 rounded-lg border-2 border-red-300">
+                    <div className="flex items-center gap-1">
+                      <span className="text-xs font-semibold text-red-700">Clinical data</span>
+                      <ClinicalBadge />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-xs text-muted-foreground">Specify biomarker:</Label>
+                      <Input value={biomarkersOther.otherSpecify} onChange={(e) => updateScored(setBiomarkersOther, "otherSpecify", e.target.value)} placeholder="Specify biomarker..." className="h-8 text-sm" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-xs text-muted-foreground">Date performed:</Label>
+                      <Input type="date" value={biomarkersOther.date} onChange={(e) => updateScored(setBiomarkersOther, "date", e.target.value)} className="w-48 h-8 text-sm" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-xs text-muted-foreground">Results:</Label>
+                      <Textarea value={biomarkersOther.score} onChange={(e) => updateScored(setBiomarkersOther, "score", e.target.value)} placeholder="Enter test results..." className="min-h-[80px] text-sm" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-xs text-muted-foreground">Performed by (discipline):</Label>
+                      <Input value={biomarkersOther.performedBy} onChange={(e) => updateScored(setBiomarkersOther, "performedBy", e.target.value)} placeholder="e.g. Neurologist" className="h-8 text-sm" />
+                    </div>
                   </div>
                 )}
-              </RadioGroup>
-            )}
-          </div>
-        </CardContent>
-      </Card>
 
-      {/* Monitoring Tools */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg font-medium text-foreground">c. Monitoring Tools</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-10">
-          {/* T25FW */}
-          <div className="space-y-4">
-            <Label className="text-base font-medium text-foreground">Was Timed 25 Foot Walk (T25FW) performed?</Label>
-            <ConditionalTestStatus
-              testPerformed={t25fwPerformed}
-              onTestPerformedChange={setT25fwPerformed}
-              value={t25fw.status}
-              onChange={(v) => setT25fw((p) => ({ ...p, status: v }))}
-              dateValue={t25fw.date}
-              onDateChange={(v) => setT25fw((p) => ({ ...p, date: v }))}
-              followUpValue={t25fw.followUpReason}
-              onFollowUpChange={(v) => setT25fw((p) => ({ ...p, followUpReason: v }))}
-              otherValue={t25fw.otherSpecify}
-              onOtherChange={(v) => setT25fw((p) => ({ ...p, otherSpecify: v }))}
-              idPrefix="t25fw"
-            />
-            {t25fw.status === "result-available" && (
-              <div className="p-3 bg-red-50 rounded-lg border-2 border-red-300 space-y-3">
-                <div className="flex items-center gap-1">
-                  <span className="text-xs font-semibold text-red-700">Clinical data</span>
-                  <ClinicalBadge />
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div className="space-y-1">
-                    <Label className="text-xs text-muted-foreground">T25FW Score - Time 1</Label>
-                    <Input value={t25fw.scoreTime1} onChange={(e) => setT25fw((p) => ({ ...p, scoreTime1: e.target.value }))} className="h-8 text-sm" />
-                  </div>
-                  <div className="space-y-1">
-                    <Label className="text-xs text-muted-foreground">Performed by (discipline)</Label>
-                    <Input value={t25fw.performedBy1} onChange={(e) => setT25fw((p) => ({ ...p, performedBy1: e.target.value }))} className="h-8 text-sm" />
-                  </div>
-                  <div className="space-y-1">
-                    <Label className="text-xs text-muted-foreground">T25FW Score - Time 2</Label>
-                    <Input value={t25fw.scoreTime2} onChange={(e) => setT25fw((p) => ({ ...p, scoreTime2: e.target.value }))} className="h-8 text-sm" />
-                  </div>
-                  <div className="space-y-1">
-                    <Label className="text-xs text-muted-foreground">Performed by (discipline)</Label>
-                    <Input value={t25fw.performedBy2} onChange={(e) => setT25fw((p) => ({ ...p, performedBy2: e.target.value }))} className="h-8 text-sm" />
-                  </div>
-                </div>
+                {bioOtherPerformed === "no" && (
+                  <RadioGroup value={biomarkersOther.status} onValueChange={(v) => updateScored(setBiomarkersOther, "status", v)} className="pl-8 space-y-2">
+                    <div className="flex items-center gap-3">
+                      <RadioGroupItem value="not-requested" id="bio-other-nr" />
+                      <Label htmlFor="bio-other-nr" className="text-sm font-normal cursor-pointer select-none">No, test not requested</Label>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <RadioGroupItem value="follow-up" id="bio-other-fu" />
+                      <Label htmlFor="bio-other-fu" className="text-sm font-normal cursor-pointer select-none">Data collector to follow up</Label>
+                    </div>
+                    {biomarkersOther.status === "follow-up" && (
+                      <div className="pl-8">
+                        <Input value={biomarkersOther.followUpReason} onChange={(e) => updateScored(setBiomarkersOther, "followUpReason", e.target.value)} placeholder="Reason for follow up..." className="h-8 text-sm" />
+                      </div>
+                    )}
+                  </RadioGroup>
+                )}
               </div>
-            )}
-          </div>
+            </CardContent>
+          </Card>
 
-          {/* EDSS */}
-          {renderScoredTest(
-            "Was EDSS performed?",
-            "Expanded Disability Status Scale. Measures disability on a scale of 0.0 to 10.0.",
-            edss, setEdss, edssPerformed, setEdssPerformed,
-            "EDSS Score (0.0 to 10.0)", true, "edss",
-          )}
+          {/* Monitoring Tools */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg font-medium text-foreground">c. Monitoring Tools</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-10">
+              {/* T25FW */}
+              <div className="space-y-4">
+                <Label className="text-base font-medium text-foreground">Was Timed 25 Foot Walk (T25FW) performed?</Label>
+                <ConditionalTestStatus
+                  testPerformed={t25fwPerformed}
+                  onTestPerformedChange={setT25fwPerformed}
+                  value={t25fw.status}
+                  onChange={(v) => setT25fw((p) => ({ ...p, status: v }))}
+                  dateValue={t25fw.date}
+                  onDateChange={(v) => setT25fw((p) => ({ ...p, date: v }))}
+                  followUpValue={t25fw.followUpReason}
+                  onFollowUpChange={(v) => setT25fw((p) => ({ ...p, followUpReason: v }))}
+                  otherValue={t25fw.otherSpecify}
+                  onOtherChange={(v) => setT25fw((p) => ({ ...p, otherSpecify: v }))}
+                  idPrefix="t25fw"
+                />
+                {t25fw.status === "result-available" && (
+                  <div className="p-3 bg-red-50 rounded-lg border-2 border-red-300 space-y-3">
+                    <div className="flex items-center gap-1">
+                      <span className="text-xs font-semibold text-red-700">Clinical data</span>
+                      <ClinicalBadge />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <Label className="text-xs text-muted-foreground">T25FW Score - Time 1</Label>
+                        <Input value={t25fw.scoreTime1} onChange={(e) => setT25fw((p) => ({ ...p, scoreTime1: e.target.value }))} className="h-8 text-sm" />
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-xs text-muted-foreground">Performed by (discipline)</Label>
+                        <Input value={t25fw.performedBy1} onChange={(e) => setT25fw((p) => ({ ...p, performedBy1: e.target.value }))} className="h-8 text-sm" />
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-xs text-muted-foreground">T25FW Score - Time 2</Label>
+                        <Input value={t25fw.scoreTime2} onChange={(e) => setT25fw((p) => ({ ...p, scoreTime2: e.target.value }))} className="h-8 text-sm" />
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-xs text-muted-foreground">Performed by (discipline)</Label>
+                        <Input value={t25fw.performedBy2} onChange={(e) => setT25fw((p) => ({ ...p, performedBy2: e.target.value }))} className="h-8 text-sm" />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
 
-          {/* SDMT */}
-          {renderScoredTest(
-            "Was SDMT performed?",
-            "Symbol Digit Modalities Test. Measures processing speed.",
-            sdmt, setSdmt, sdmtPerformed, setSdmtPerformed,
-            "SDMT Score (no. of correct symbols)", true, "sdmt",
-          )}
+              {/* EDSS */}
+              {renderScoredTest(
+                "Was EDSS performed?",
+                "Expanded Disability Status Scale. Measures disability on a scale of 0.0 to 10.0.",
+                edss, setEdss, edssPerformed, setEdssPerformed,
+                "EDSS Score (0.0 to 10.0)", true, "edss",
+              )}
 
-          {/* BDI */}
-          {renderScoredTest(
-            "Was BDI performed?",
-            "Beck's Depression Inventory. Measures depression severity.",
-            bdi, setBdi, bdiPerformed, setBdiPerformed,
-            "BDI Score", true, "bdi",
-          )}
+              {/* SDMT */}
+              {renderScoredTest(
+                "Was SDMT performed?",
+                "Symbol Digit Modalities Test. Measures processing speed.",
+                sdmt, setSdmt, sdmtPerformed, setSdmtPerformed,
+                "SDMT Score (no. of correct symbols)", true, "sdmt",
+              )}
 
-          {/* HADS */}
-          {renderScoredTest(
-            "Was HADS performed?",
-            "Hospital Anxiety and Depression Scale. Also appears in the Mood section.",
-            hads, setHads, hadsPerformed, setHadsPerformed,
-            "HADS Total Score", true, "hads",
-          )}
-        </CardContent>
-      </Card>
+              {/* BDI */}
+              {renderScoredTest(
+                "Was BDI performed?",
+                "Beck's Depression Inventory. Measures depression severity.",
+                bdi, setBdi, bdiPerformed, setBdiPerformed,
+                "BDI Score", true, "bdi",
+              )}
 
-      {/* d. Other tests */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg font-medium text-foreground flex items-center">
-            d. Other Tests Performed
-            <ClinicalBadge />
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground mb-3">Include date, score, type of test, and performed by.</p>
-          <Textarea
-            value={otherTests}
-            onChange={(e) => setOtherTests(e.target.value)}
-            placeholder="Enter details of any other tests performed..."
-            className="min-h-[100px]"
-          />
-        </CardContent>
-      </Card>
+              {/* HADS */}
+              {renderScoredTest(
+                "Was HADS performed?",
+                "Hospital Anxiety and Depression Scale. Also appears in the Mood section.",
+                hads, setHads, hadsPerformed, setHadsPerformed,
+                "HADS Total Score", true, "hads",
+              )}
+            </CardContent>
+          </Card>
+
+          {/* d. Other tests */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg font-medium text-foreground flex items-center">
+                d. Other Tests Performed
+                <ClinicalBadge />
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Label className="text-base font-medium text-foreground">Were other tests performed?</Label>
+              <RadioGroup value={otherTestPerformed} onValueChange={setOtherTestPerformed} className="flex gap-4 pl-4">
+                <div className="flex items-center gap-2">
+                  <RadioGroupItem value="yes" id="other-test-yes" />
+                  <Label htmlFor="other-test-yes" className="text-sm font-normal cursor-pointer select-none">Yes</Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <RadioGroupItem value="no" id="other-test-no" />
+                  <Label htmlFor="other-test-no" className="text-sm font-normal cursor-pointer select-none">No</Label>
+                </div>
+              </RadioGroup>
+
+              {otherTestPerformed === "yes" && (
+                <div className="p-4 bg-red-50 rounded-lg border-2 border-red-300 space-y-4">
+                  <div className="flex items-center gap-1">
+                    <span className="text-xs font-semibold text-red-700">Clinical data</span>
+                    <ClinicalBadge />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <Label className="text-xs text-muted-foreground">Type of test</Label>
+                      <Input value={otherTestType} onChange={(e) => setOtherTestType(e.target.value)} placeholder="Enter test type..." className="h-8 text-sm" />
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-xs text-muted-foreground">Date performed</Label>
+                      <Input type="date" value={otherTestDate} onChange={(e) => setOtherTestDate(e.target.value)} className="h-8 text-sm" />
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-xs text-muted-foreground">Score</Label>
+                      <Input value={otherTestScore} onChange={(e) => setOtherTestScore(e.target.value)} placeholder="Enter score..." className="h-8 text-sm" />
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-xs text-muted-foreground">Performed by (discipline)</Label>
+                      <Input value={otherTestPerformedBy} onChange={(e) => setOtherTestPerformedBy(e.target.value)} placeholder="e.g. Neurologist" className="h-8 text-sm" />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {otherTestPerformed === "no" && (
+                <p className="text-sm text-muted-foreground italic pl-4">No other tests performed for this encounter.</p>
+              )}
+            </CardContent>
+          </Card>
+        </>
+      )}
     </div>
   );
 };
