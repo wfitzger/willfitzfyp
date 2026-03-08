@@ -246,11 +246,21 @@ const SmokingAlcoholCannabisSection = () => {
               {/* Duration / Packs / Pack Years */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pl-4">
                 <div className="space-y-1">
-                  <Label className="text-sm text-muted-foreground">Duration of smoking (total years)</Label>
+                  <div className="flex items-center gap-1">
+                    <Label className="text-sm text-muted-foreground">Duration of smoking (total years)</Label>
+                    <InfoTooltip>
+                      <p>Enter whole numbers only (e.g. 5, 10, 15).</p>
+                    </InfoTooltip>
+                  </div>
                   <Input type="number" value={smokingDuration} onChange={(e) => setSmokingDuration(e.target.value)} placeholder="Years" className="h-8 text-sm" />
                 </div>
                 <div className="space-y-1">
-                  <Label className="text-sm text-muted-foreground">No. of packs a day (20 cigs/pack)</Label>
+                  <div className="flex items-center gap-1">
+                    <Label className="text-sm text-muted-foreground">No. of packs a day (20 cigs/pack)</Label>
+                    <InfoTooltip>
+                      <p>Decimals accepted (e.g. 0.5 for half a pack, 1.5 for one and a half packs).</p>
+                    </InfoTooltip>
+                  </div>
                   <Input type="number" step="0.1" value={smokingPacksPerDay} onChange={(e) => setSmokingPacksPerDay(e.target.value)} placeholder="Packs" className="h-8 text-sm" />
                 </div>
                 <div className="space-y-1">
