@@ -53,15 +53,36 @@ const SmokingAlcoholCannabisSection = () => {
   const [cannabisDuration, setCannabisDuration] = useState("");
   const [cannabisAdditional, setCannabisAdditional] = useState("");
 
-  // 9c-b Other drugs
+  // 9c-b Other drugs (multiple entries)
+  interface DrugEntry {
+    type: string;
+    ageStarted: string;
+    ageStopped: string;
+    form: string;
+    frequency: string;
+    duration: string;
+    additional: string;
+  }
   const [drugStatus, setDrugStatus] = useState<DrugStatus>("");
-  const [drugType, setDrugType] = useState("");
-  const [drugAgeStarted, setDrugAgeStarted] = useState("");
-  const [drugAgeStopped, setDrugAgeStopped] = useState("");
-  const [drugForm, setDrugForm] = useState("");
-  const [drugFrequency, setDrugFrequency] = useState("");
-  const [drugDuration, setDrugDuration] = useState("");
-  const [drugAdditional, setDrugAdditional] = useState("");
+  const [drugEntries, setDrugEntries] = useState<DrugEntry[]>([
+    { type: "", ageStarted: "", ageStopped: "", form: "", frequency: "", duration: "", additional: "" }
+  ]);
+
+  const updateDrugEntry = (index: number, field: keyof DrugEntry, value: string) => {
+    const updated = [...drugEntries];
+    updated[index] = { ...updated[index], [field]: value };
+    setDrugEntries(updated);
+  };
+
+  const addDrugEntry = () => {
+    setDrugEntries([...drugEntries, { type: "", ageStarted: "", ageStopped: "", form: "", frequency: "", duration: "", additional: "" }]);
+  };
+
+  const removeDrugEntry = (index: number) => {
+    if (drugEntries.length > 1) {
+      setDrugEntries(drugEntries.filter((_, i) => i !== index));
+    }
+  };
 
   const smokingPackYears = useMemo(() => {
     const duration = parseFloat(smokingDuration);
