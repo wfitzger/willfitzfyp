@@ -453,7 +453,7 @@ const SmokingAlcoholCannabisSection = () => {
       {/* 9c. Recreational Drug Use including cannabis */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg font-medium text-foreground">9c. Recreational Drug Use including Cannabis Use</CardTitle>
+          <CardTitle className="text-lg font-medium text-foreground">c. Recreational Drug Use including Cannabis Use</CardTitle>
         </CardHeader>
         <CardContent className="space-y-8">
           {/* Cannabis */}
