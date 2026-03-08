@@ -99,6 +99,11 @@ const ClinicalQuestionnaire = () => {
                       <p>Tracks disease progression via MRI, biomarkers, and monitoring tools. Complete from the second encounter onwards. Contains clinical questions.</p>
                     </InfoTooltip>
                   )}
+                  {activeSection === 9 && (
+                    <InfoTooltip>
+                      <p>Gathers information about smoking history, alcohol intake and recreational cannabis use to explore the health behaviours of the population.</p>
+                    </InfoTooltip>
+                  )}
                 </div>
                 {currentSection && (
                   <p className="text-muted-foreground text-sm mt-1">
