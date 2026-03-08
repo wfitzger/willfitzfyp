@@ -72,6 +72,15 @@ const SmokingAlcoholCannabisSection = () => {
     return "";
   }, [smokingDuration, smokingPacksPerDay]);
 
+  const smokingDurationAuto = useMemo(() => {
+    const start = parseFloat(smokingAgeStarted);
+    const stop = parseFloat(smokingAgeStopped);
+    if (smokingStatus === "previously" && !isNaN(start) && !isNaN(stop) && stop >= start) {
+      return (stop - start).toString();
+    }
+    return smokingDuration;
+  }, [smokingAgeStarted, smokingAgeStopped, smokingStatus, smokingDuration]);
+
   const vapingDurationAuto = useMemo(() => {
     const start = parseFloat(vapingAgeStarted);
     const stop = parseFloat(vapingAgeStopped);
