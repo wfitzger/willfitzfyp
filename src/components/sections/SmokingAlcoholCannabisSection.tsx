@@ -134,7 +134,7 @@ const SmokingAlcoholCannabisSection = () => {
           {/* Question a - Smoking status */}
           <div className="space-y-3">
             <Label className="text-base font-medium text-foreground">
-              a. Smoking history: Has the participant ever smoked (tobacco)?
+              Smoking history: Has the participant ever smoked (tobacco)?
             </Label>
             <RadioGroup value={smokingStatus} onValueChange={(v) => setSmokingStatus(v as SmokingStatus)} className="pl-4 space-y-2">
               <div className="flex items-center gap-3">
