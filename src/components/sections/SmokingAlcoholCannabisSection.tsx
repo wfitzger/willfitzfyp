@@ -553,28 +553,10 @@ const SmokingAlcoholCannabisSection = () => {
               <div className="flex items-center gap-3">
                 <RadioGroupItem value="currently" id="drug-currently" />
                 <Label htmlFor="drug-currently" className="text-sm font-normal cursor-pointer select-none">Yes</Label>
-                {drugStatus === "currently" && (
-                  <div className="flex items-center gap-2 ml-2">
-                    <Label className="text-xs text-muted-foreground whitespace-nowrap">Age started:</Label>
-                    <Input type="number" value={drugAgeStarted} onChange={(e) => setDrugAgeStarted(e.target.value)} className="w-20 h-8 text-sm" />
-                  </div>
-                )}
               </div>
-              <div className="flex items-center gap-3 flex-wrap">
+              <div className="flex items-center gap-3">
                 <RadioGroupItem value="previously" id="drug-previously" />
                 <Label htmlFor="drug-previously" className="text-sm font-normal cursor-pointer select-none">Yes, but not currently taking recreational drugs</Label>
-                {drugStatus === "previously" && (
-                  <div className="flex items-center gap-4 ml-2">
-                    <div className="flex items-center gap-2">
-                      <Label className="text-xs text-muted-foreground whitespace-nowrap">Age started:</Label>
-                      <Input type="number" value={drugAgeStarted} onChange={(e) => setDrugAgeStarted(e.target.value)} className="w-20 h-8 text-sm" />
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Label className="text-xs text-muted-foreground whitespace-nowrap">Age stopped:</Label>
-                      <Input type="number" value={drugAgeStopped} onChange={(e) => setDrugAgeStopped(e.target.value)} className="w-20 h-8 text-sm" />
-                    </div>
-                  </div>
-                )}
               </div>
               <div className="flex items-center gap-3">
                 <RadioGroupItem value="never" id="drug-never" />
@@ -588,6 +570,24 @@ const SmokingAlcoholCannabisSection = () => {
                   <Label className="text-sm text-muted-foreground">Type:</Label>
                   <Input value={drugType} onChange={(e) => setDrugType(e.target.value)} placeholder="Type of drug" className="w-60 h-8 text-sm" />
                 </div>
+                {drugStatus === "currently" && (
+                  <div className="flex items-center gap-2">
+                    <Label className="text-xs text-muted-foreground whitespace-nowrap">Age started:</Label>
+                    <Input type="number" value={drugAgeStarted} onChange={(e) => setDrugAgeStarted(e.target.value)} className="w-20 h-8 text-sm" />
+                  </div>
+                )}
+                {drugStatus === "previously" && (
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
+                      <Label className="text-xs text-muted-foreground whitespace-nowrap">Age started:</Label>
+                      <Input type="number" value={drugAgeStarted} onChange={(e) => setDrugAgeStarted(e.target.value)} className="w-20 h-8 text-sm" />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Label className="text-xs text-muted-foreground whitespace-nowrap">Age stopped:</Label>
+                      <Input type="number" value={drugAgeStopped} onChange={(e) => setDrugAgeStopped(e.target.value)} className="w-20 h-8 text-sm" />
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
