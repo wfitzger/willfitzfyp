@@ -5,6 +5,7 @@ import SectionList, { sections } from "./SectionList";
 import ClinicalVisitSection from "./sections/ClinicalVisitSection";
 import FamilyMSHistorySection from "./FamilyMSHistorySection";
 import MSProgressionSection from "./sections/MSProgressionSection";
+import SmokingAlcoholCannabisSection from "./sections/SmokingAlcoholCannabisSection";
 import PlaceholderSection from "./sections/PlaceholderSection";
 import ChatbotPopup from "./ChatbotPopup";
 import InfoTooltip from "./InfoTooltip";
