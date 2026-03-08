@@ -328,11 +328,7 @@ const MSProgressionSection = () => {
               This section does not need to be filled on the first encounter.
             </p>
             <InfoTooltip>
-              <div className="space-y-2">
-                <p>During this encounter, the participant may have undergone tests related to disease progression. If applicable, complete both the MS Diagnostic Tests and MS Progression Tests sections for the initial encounter.</p>
-                <p>MS Progression tests aim to establish the rate of disease progression for the participant.</p>
-                <p>This section should be completed during the participant's second and subsequent encounters. If it is not completed at that time, it should be reviewed and completed as soon as possible.</p>
-              </div>
+              <p>Complete from the second encounter onwards. If not completed at that time, review and complete as soon as possible. If applicable, also complete MS Diagnostic Tests for the initial encounter.</p>
             </InfoTooltip>
           </div>
         </CardContent>
