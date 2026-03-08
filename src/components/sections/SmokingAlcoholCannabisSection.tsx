@@ -330,12 +330,7 @@ const SmokingAlcoholCannabisSection = () => {
                   <Input type="number" value={vapingDaysPerBottle} onChange={(e) => setVapingDaysPerBottle(e.target.value)} placeholder="Days" className="h-8 text-sm" />
                 </div>
                 <div className="space-y-1">
-                  <div className="flex items-center gap-1">
-                    <Label className="text-sm text-muted-foreground">Duration of vaping (total years)</Label>
-                    <InfoTooltip>
-                      <p>Auto-calculated from age started and age stopped when available.</p>
-                    </InfoTooltip>
-                  </div>
+                  <Label className="text-sm text-muted-foreground">Duration of vaping (total years)</Label>
                   <Input
                     type="number"
                     value={vapingStatus === "previously" ? vapingDurationAuto : vapingDuration}
