@@ -660,6 +660,7 @@ const SmokingAlcoholCannabisSection = () => {
                 </Button>
               </div>
             )}
+          </div>
         </CardContent>
       </Card>
     </div>
