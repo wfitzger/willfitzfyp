@@ -546,7 +546,7 @@ const SmokingAlcoholCannabisSection = () => {
           {/* Other recreational drugs */}
           <div className="space-y-3 pt-4 border-t border-border">
             <Label className="text-base font-medium text-foreground">
-              Has the participant ever taken recreational drugs?
+              Has the participant ever taken other recreational drugs?
             </Label>
 
             <div className="pl-4 space-y-3">
