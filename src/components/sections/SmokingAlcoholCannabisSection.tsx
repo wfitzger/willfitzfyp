@@ -364,7 +364,7 @@ const SmokingAlcoholCannabisSection = () => {
         <CardContent className="space-y-8">
           <div className="space-y-3">
             <Label className="text-base font-medium text-foreground">
-              a. Alcohol history: Has the participant ever consumed alcohol?
+              Alcohol history: Has the participant ever consumed alcohol?
             </Label>
             <RadioGroup value={alcoholStatus} onValueChange={(v) => setAlcoholStatus(v as AlcoholStatus)} className="pl-4 space-y-2">
               <div className="flex items-center gap-3">
