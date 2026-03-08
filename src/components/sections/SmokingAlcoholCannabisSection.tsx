@@ -590,6 +590,7 @@ const SmokingAlcoholCannabisSection = () => {
                 </div>
               </div>
             )}
+          </div>
 
           {showDrugDetails && (
             <div className="space-y-4 pl-4">
