@@ -328,7 +328,7 @@ const MSProgressionSection = () => {
               This section does not need to be filled on the first encounter.
             </p>
             <InfoTooltip>
-              <p>Complete from the second encounter onwards. If not completed at that time, review and complete as soon as possible.</p>
+              <p>Complete from the second encounter onwards, as this section only tracks the progression of the disease. If not completed at that time, review and complete as soon as possible.</p>
             </InfoTooltip>
           </div>
         </CardContent>
