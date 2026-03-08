@@ -215,27 +215,21 @@ const SmokingAlcoholCannabisSection = () => {
               {/* Frequency */}
               <div className="space-y-3 pl-4">
                 <Label className="text-sm font-medium text-foreground">
-                  How many cigarettes:
+                  How many cigarettes per day:
                 </Label>
-                <div className="flex items-center gap-3">
-                  <Input
-                    type="number"
-                    value={smokingFrequency}
-                    onChange={(e) => setSmokingFrequency(e.target.value)}
-                    placeholder="Number"
-                    className="w-28 h-8 text-sm"
-                  />
-                  <RadioGroup value={smokingFrequencyPeriod} onValueChange={setSmokingFrequencyPeriod} className="flex gap-4">
-                    <div className="flex items-center gap-2">
-                      <RadioGroupItem value="per-week" id="freq-per-week" />
-                      <Label htmlFor="freq-per-week" className="text-sm font-normal cursor-pointer select-none">Per Week</Label>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <RadioGroupItem value="per-month" id="freq-per-month" />
-                      <Label htmlFor="freq-per-month" className="text-sm font-normal cursor-pointer select-none">Per Month</Label>
-                    </div>
-                  </RadioGroup>
-                </div>
+                <Input
+                  type="number"
+                  value={smokingFrequency}
+                  onChange={(e) => setSmokingFrequency(e.target.value)}
+                  placeholder="Number per day"
+                  className="w-40 h-8 text-sm"
+                />
+                {smokingFrequency && Number(smokingFrequency) > 0 && (
+                  <div className="flex gap-6 text-sm text-muted-foreground">
+                    <span>Per week: <strong className="text-foreground">{(Number(smokingFrequency) * 7).toFixed(0)}</strong></span>
+                    <span>Per month: <strong className="text-foreground">{(Number(smokingFrequency) * 30).toFixed(0)}</strong></span>
+                  </div>
+                )}
               </div>
 
               {/* Additional smoking text */}
