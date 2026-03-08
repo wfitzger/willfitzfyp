@@ -120,14 +120,14 @@ const SmokingAlcoholCannabisSection = () => {
     return cannabisDuration;
   }, [cannabisAgeStarted, cannabisAgeStopped, cannabisStatus, cannabisDuration]);
 
-  const drugDurationAuto = useMemo(() => {
-    const start = parseFloat(drugAgeStarted);
-    const stop = parseFloat(drugAgeStopped);
+  const getDrugDurationAuto = (entry: DrugEntry) => {
+    const start = parseFloat(entry.ageStarted);
+    const stop = parseFloat(entry.ageStopped);
     if (drugStatus === "previously" && !isNaN(start) && !isNaN(stop) && stop >= start) {
       return (stop - start).toString();
     }
-    return drugDuration;
-  }, [drugAgeStarted, drugAgeStopped, drugStatus, drugDuration]);
+    return entry.duration;
+  };
 
   const handleSmokingTypeChange = (type: string, checked: boolean) => {
     if (checked) {
