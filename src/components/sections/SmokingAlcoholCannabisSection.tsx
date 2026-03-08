@@ -128,7 +128,7 @@ const SmokingAlcoholCannabisSection = () => {
       {/* 9a. Smoking History */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg font-medium text-foreground">9a. Smoking History</CardTitle>
+          <CardTitle className="text-lg font-medium text-foreground">a. Smoking History</CardTitle>
         </CardHeader>
         <CardContent className="space-y-8">
           {/* Question a - Smoking status */}
