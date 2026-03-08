@@ -459,7 +459,7 @@ const SmokingAlcoholCannabisSection = () => {
           {/* Cannabis */}
           <div className="space-y-3">
             <Label className="text-base font-medium text-foreground">
-              a. Recreational cannabis: Has the participant ever taken recreational cannabis?
+              Recreational cannabis: Has the participant ever taken recreational cannabis?
             </Label>
             <RadioGroup value={cannabisStatus} onValueChange={(v) => setCannabisStatus(v as CannabisStatus)} className="pl-4 space-y-2">
               <div className="flex items-center gap-3">
