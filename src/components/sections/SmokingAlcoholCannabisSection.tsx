@@ -359,7 +359,7 @@ const SmokingAlcoholCannabisSection = () => {
       {/* 9b. Alcohol Consumption */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg font-medium text-foreground">9b. Alcohol Consumption</CardTitle>
+          <CardTitle className="text-lg font-medium text-foreground">b. Alcohol Consumption</CardTitle>
         </CardHeader>
         <CardContent className="space-y-8">
           <div className="space-y-3">
