@@ -48,6 +48,8 @@ const ClinicalQuestionnaire = () => {
         return <FamilyMSHistorySection />;
       case 6:
         return <MSProgressionSection />;
+      case 9:
+        return <SmokingAlcoholCannabisSection />;
       default:
         return (
           <PlaceholderSection
