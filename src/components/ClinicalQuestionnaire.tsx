@@ -5,6 +5,7 @@ import SectionList, { sections } from "./SectionList";
 import ClinicalVisitSection from "./sections/ClinicalVisitSection";
 import FamilyMSHistorySection from "./FamilyMSHistorySection";
 import MSProgressionSection from "./sections/MSProgressionSection";
+import SmokingAlcoholCannabisSection from "./sections/SmokingAlcoholCannabisSection";
 import PlaceholderSection from "./sections/PlaceholderSection";
 import ChatbotPopup from "./ChatbotPopup";
 import InfoTooltip from "./InfoTooltip";
@@ -47,6 +48,8 @@ const ClinicalQuestionnaire = () => {
         return <FamilyMSHistorySection />;
       case 6:
         return <MSProgressionSection />;
+      case 9:
+        return <SmokingAlcoholCannabisSection />;
       default:
         return (
           <PlaceholderSection
@@ -94,6 +97,11 @@ const ClinicalQuestionnaire = () => {
                   {activeSection === 6 && (
                     <InfoTooltip>
                       <p>Tracks disease progression via MRI, biomarkers, and monitoring tools. Complete from the second encounter onwards. Contains clinical questions.</p>
+                    </InfoTooltip>
+                  )}
+                  {activeSection === 9 && (
+                    <InfoTooltip>
+                      <p>Gathers information about smoking history, alcohol intake and recreational cannabis use to explore the health behaviours of the population.</p>
                     </InfoTooltip>
                   )}
                 </div>

@@ -27,7 +27,7 @@ export const sections: Section[] = [
 ];
 
 // Sections that have actual form content implemented
-const implementedSections = new Set([2, 4, 6]);
+const implementedSections = new Set([2, 4, 6, 9]);
 
 const getQuestionTypeLabel = (type: Section["questionType"]) => {
   switch (type) {
