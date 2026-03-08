@@ -118,9 +118,6 @@ const SmokingAlcoholCannabisSection = () => {
       {/* Intro Card */}
       <Card className="border-l-4 border-l-primary">
         <CardContent className="pt-6">
-          <p className="text-sm text-foreground leading-relaxed mb-2">
-            This section should only be completed at the first clinical encounter. If not completed, it should be reviewed at the earliest opportunity.
-          </p>
           <ul className="text-sm text-muted-foreground list-disc list-inside space-y-1">
             <li><strong>First visit/first interview:</strong> ask all questions</li>
             <li><strong>Second or subsequent visit/interview:</strong> Check if any answers have changed since the last visit.</li>
