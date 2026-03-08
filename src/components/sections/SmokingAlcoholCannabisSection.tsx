@@ -549,13 +549,6 @@ const SmokingAlcoholCannabisSection = () => {
               Has the participant ever taken other recreational drugs?
             </Label>
 
-            <div className="pl-4 space-y-3">
-              <div className="space-y-1">
-                <Label className="text-sm text-muted-foreground">Type:</Label>
-                <Input value={drugType} onChange={(e) => setDrugType(e.target.value)} placeholder="Type of drug" className="w-60 h-8 text-sm" />
-              </div>
-            </div>
-
             <RadioGroup value={drugStatus} onValueChange={(v) => setDrugStatus(v as DrugStatus)} className="pl-4 space-y-2">
               <div className="flex items-center gap-3">
                 <RadioGroupItem value="currently" id="drug-currently" />
@@ -588,7 +581,15 @@ const SmokingAlcoholCannabisSection = () => {
                 <Label htmlFor="drug-never" className="text-sm font-normal cursor-pointer select-none">Never taken recreational drugs</Label>
               </div>
             </RadioGroup>
-          </div>
+
+            {showDrugDetails && (
+              <div className="space-y-3 pl-4">
+                <div className="space-y-1">
+                  <Label className="text-sm text-muted-foreground">Type:</Label>
+                  <Input value={drugType} onChange={(e) => setDrugType(e.target.value)} placeholder="Type of drug" className="w-60 h-8 text-sm" />
+                </div>
+              </div>
+            )}
 
           {showDrugDetails && (
             <div className="space-y-4 pl-4">
