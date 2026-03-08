@@ -72,6 +72,15 @@ const SmokingAlcoholCannabisSection = () => {
     return "";
   }, [smokingDuration, smokingPacksPerDay]);
 
+  const smokingDurationAuto = useMemo(() => {
+    const start = parseFloat(smokingAgeStarted);
+    const stop = parseFloat(smokingAgeStopped);
+    if (smokingStatus === "previously" && !isNaN(start) && !isNaN(stop) && stop >= start) {
+      return (stop - start).toString();
+    }
+    return smokingDuration;
+  }, [smokingAgeStarted, smokingAgeStopped, smokingStatus, smokingDuration]);
+
   const vapingDurationAuto = useMemo(() => {
     const start = parseFloat(vapingAgeStarted);
     const stop = parseFloat(vapingAgeStopped);
@@ -252,7 +261,7 @@ const SmokingAlcoholCannabisSection = () => {
                       <p>Decimals accepted (e.g. 2.5 for two and a half years).</p>
                     </InfoTooltip>
                   </div>
-                  <Input type="number" value={smokingDuration} onChange={(e) => setSmokingDuration(e.target.value)} placeholder="Years" className="h-8 text-sm" />
+                  <Input type="number" step="0.1" value={smokingStatus === "previously" ? smokingDurationAuto : smokingDuration} onChange={(e) => setSmokingDuration(e.target.value)} readOnly={smokingStatus === "previously" && !!smokingAgeStarted && !!smokingAgeStopped} placeholder="Years" className={`h-8 text-sm ${smokingStatus === "previously" && !!smokingAgeStarted && !!smokingAgeStopped ? "bg-muted/50" : ""}`} />
                 </div>
                 <div className="space-y-1">
                   <div className="flex items-center gap-1">
