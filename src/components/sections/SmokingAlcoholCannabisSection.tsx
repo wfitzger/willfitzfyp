@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import InfoTooltip from "@/components/InfoTooltip";
+import { Button } from "@/components/ui/button";
 
 type SmokingStatus = "" | "currently" | "previously" | "never";
 type VapingStatus = "" | "currently" | "previously" | "never";
