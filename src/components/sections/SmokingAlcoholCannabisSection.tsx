@@ -586,72 +586,80 @@ const SmokingAlcoholCannabisSection = () => {
             </RadioGroup>
 
             {showDrugDetails && (
-              <div className="space-y-3 pl-4">
-                <div className="space-y-1">
-                  <Label className="text-sm text-muted-foreground">Type:</Label>
-                  <Input value={drugType} onChange={(e) => setDrugType(e.target.value)} placeholder="Type of drug" className="w-60 h-8 text-sm" />
-                </div>
-                {drugStatus === "currently" && (
-                  <div className="flex items-center gap-2">
-                    <Label className="text-xs text-muted-foreground whitespace-nowrap">Age started:</Label>
-                    <Input type="number" value={drugAgeStarted} onChange={(e) => setDrugAgeStarted(e.target.value)} className="w-20 h-8 text-sm" />
-                  </div>
-                )}
-                {drugStatus === "previously" && (
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2">
-                      <Label className="text-xs text-muted-foreground whitespace-nowrap">Age started:</Label>
-                      <Input type="number" value={drugAgeStarted} onChange={(e) => setDrugAgeStarted(e.target.value)} className="w-20 h-8 text-sm" />
+              <div className="space-y-6 pl-4">
+                {drugEntries.map((entry, index) => {
+                  const durAuto = getDrugDurationAuto(entry);
+                  const isAutoCalc = drugStatus === "previously" && !!entry.ageStarted && !!entry.ageStopped;
+                  return (
+                    <div key={index} className="space-y-3 border border-border rounded-lg p-4">
+                      <div className="flex items-center justify-between">
+                        <Label className="text-sm font-medium text-foreground">Drug {index + 1}</Label>
+                        {drugEntries.length > 1 && (
+                          <Button type="button" variant="ghost" size="sm" onClick={() => removeDrugEntry(index)} className="text-destructive hover:text-destructive h-7 px-2 text-xs">
+                            Remove
+                          </Button>
+                        )}
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-sm text-muted-foreground">Type:</Label>
+                        <Input value={entry.type} onChange={(e) => updateDrugEntry(index, "type", e.target.value)} placeholder="Type of drug" className="w-60 h-8 text-sm" />
+                      </div>
+                      {drugStatus === "currently" && (
+                        <div className="flex items-center gap-2">
+                          <Label className="text-xs text-muted-foreground whitespace-nowrap">Age started:</Label>
+                          <Input type="number" value={entry.ageStarted} onChange={(e) => updateDrugEntry(index, "ageStarted", e.target.value)} className="w-20 h-8 text-sm" />
+                        </div>
+                      )}
+                      {drugStatus === "previously" && (
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center gap-2">
+                            <Label className="text-xs text-muted-foreground whitespace-nowrap">Age started:</Label>
+                            <Input type="number" value={entry.ageStarted} onChange={(e) => updateDrugEntry(index, "ageStarted", e.target.value)} className="w-20 h-8 text-sm" />
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Label className="text-xs text-muted-foreground whitespace-nowrap">Age stopped:</Label>
+                            <Input type="number" value={entry.ageStopped} onChange={(e) => updateDrugEntry(index, "ageStopped", e.target.value)} className="w-20 h-8 text-sm" />
+                          </div>
+                        </div>
+                      )}
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="space-y-1">
+                          <Label className="text-sm text-muted-foreground">Form</Label>
+                          <Input value={entry.form} onChange={(e) => updateDrugEntry(index, "form", e.target.value)} placeholder="e.g. Smoked, Injected" className="h-8 text-sm" />
+                        </div>
+                        <div className="space-y-1">
+                          <Label className="text-sm text-muted-foreground">Frequency</Label>
+                          <Input value={entry.frequency} onChange={(e) => updateDrugEntry(index, "frequency", e.target.value)} placeholder="e.g. Daily, Weekly" className="h-8 text-sm" />
+                        </div>
+                        <div className="space-y-1">
+                          <Label className="text-sm text-muted-foreground">Duration (total years)</Label>
+                          <Input
+                            type="number"
+                            value={isAutoCalc ? durAuto : entry.duration}
+                            onChange={(e) => updateDrugEntry(index, "duration", e.target.value)}
+                            readOnly={isAutoCalc}
+                            placeholder={isAutoCalc ? "Auto-calculated" : "Years"}
+                            className={`h-8 text-sm ${isAutoCalc ? "bg-muted/50" : ""}`}
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="text-sm text-muted-foreground">Add the participant's additional recreational drug consumption history here:</Label>
+                        <Textarea
+                          value={entry.additional}
+                          onChange={(e) => updateDrugEntry(index, "additional", e.target.value)}
+                          placeholder="Enter additional drug history..."
+                          className="min-h-[80px]"
+                        />
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Label className="text-xs text-muted-foreground whitespace-nowrap">Age stopped:</Label>
-                      <Input type="number" value={drugAgeStopped} onChange={(e) => setDrugAgeStopped(e.target.value)} className="w-20 h-8 text-sm" />
-                    </div>
-                  </div>
-                )}
+                  );
+                })}
+                <Button type="button" variant="outline" size="sm" onClick={addDrugEntry} className="gap-1">
+                  + Add another drug
+                </Button>
               </div>
             )}
-          </div>
-
-          {showDrugDetails && (
-            <div className="space-y-4 pl-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="space-y-1">
-                  <Label className="text-sm text-muted-foreground">Form</Label>
-                  <Input value={drugForm} onChange={(e) => setDrugForm(e.target.value)} placeholder="e.g. Smoked, Injected" className="h-8 text-sm" />
-                </div>
-                <div className="space-y-1">
-                  <Label className="text-sm text-muted-foreground">Frequency</Label>
-                  <Input value={drugFrequency} onChange={(e) => setDrugFrequency(e.target.value)} placeholder="e.g. Daily, Weekly" className="h-8 text-sm" />
-                </div>
-                <div className="space-y-1">
-                  <div className="flex items-center gap-1">
-                    <Label className="text-sm text-muted-foreground">Duration (total years)</Label>
-                    <InfoTooltip>
-                      <p>Auto-calculated from age started and age stopped when available.</p>
-                    </InfoTooltip>
-                  </div>
-                  <Input
-                    type="number"
-                    value={drugStatus === "previously" ? drugDurationAuto : drugDuration}
-                    onChange={(e) => setDrugDuration(e.target.value)}
-                    readOnly={drugStatus === "previously" && drugDurationAuto !== drugDuration}
-                    placeholder={drugStatus === "previously" ? "Auto-calculated" : "Years"}
-                    className={`h-8 text-sm ${drugStatus === "previously" && drugDurationAuto !== drugDuration ? "bg-muted/50" : ""}`}
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <Label className="text-sm text-muted-foreground">Add the participant's additional recreational drug consumption history here:</Label>
-                <Textarea
-                  value={drugAdditional}
-                  onChange={(e) => setDrugAdditional(e.target.value)}
-                  placeholder="Enter additional drug history..."
-                  className="min-h-[80px]"
-                />
-              </div>
-            </div>
-          )}
         </CardContent>
       </Card>
     </div>
