@@ -134,7 +134,7 @@ const SmokingAlcoholCannabisSection = () => {
           {/* Question a - Smoking status */}
           <div className="space-y-3">
             <Label className="text-base font-medium text-foreground">
-              a. Smoking history: Has the participant ever smoked (tobacco)?
+              Smoking history: Has the participant ever smoked (tobacco)?
             </Label>
             <RadioGroup value={smokingStatus} onValueChange={(v) => setSmokingStatus(v as SmokingStatus)} className="pl-4 space-y-2">
               <div className="flex items-center gap-3">
@@ -275,7 +275,7 @@ const SmokingAlcoholCannabisSection = () => {
           {/* Question b - Vaping */}
           <div className="space-y-3 pt-4 border-t border-border">
             <Label className="text-base font-medium text-foreground">
-              b. Vaping history: Has the participant ever vaped?
+              Vaping history: Has the participant ever vaped?
             </Label>
             <RadioGroup value={vapingStatus} onValueChange={(v) => setVapingStatus(v as VapingStatus)} className="pl-4 space-y-2">
               <div className="flex items-center gap-3">
@@ -364,7 +364,7 @@ const SmokingAlcoholCannabisSection = () => {
         <CardContent className="space-y-8">
           <div className="space-y-3">
             <Label className="text-base font-medium text-foreground">
-              a. Alcohol history: Has the participant ever consumed alcohol?
+              Alcohol history: Has the participant ever consumed alcohol?
             </Label>
             <RadioGroup value={alcoholStatus} onValueChange={(v) => setAlcoholStatus(v as AlcoholStatus)} className="pl-4 space-y-2">
               <div className="flex items-center gap-3">
@@ -459,7 +459,7 @@ const SmokingAlcoholCannabisSection = () => {
           {/* Cannabis */}
           <div className="space-y-3">
             <Label className="text-base font-medium text-foreground">
-              a. Recreational cannabis: Has the participant ever taken recreational cannabis?
+              Recreational cannabis: Has the participant ever taken recreational cannabis?
             </Label>
             <RadioGroup value={cannabisStatus} onValueChange={(v) => setCannabisStatus(v as CannabisStatus)} className="pl-4 space-y-2">
               <div className="flex items-center gap-3">
@@ -538,7 +538,7 @@ const SmokingAlcoholCannabisSection = () => {
           {/* Other recreational drugs */}
           <div className="space-y-3 pt-4 border-t border-border">
             <Label className="text-base font-medium text-foreground">
-              b. Other recreational drug use: Has the participant ever taken recreational drugs?
+              Other recreational drug use: Has the participant ever taken recreational drugs?
             </Label>
 
             <div className="pl-4 space-y-3">
