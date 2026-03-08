@@ -101,12 +101,7 @@ const ClinicalQuestionnaire = () => {
                   )}
                   {activeSection === 9 && (
                     <InfoTooltip>
-                      <p className="mb-2">Gathers information about smoking history, alcohol intake and recreational cannabis use to explore the health behaviours of the population.</p>
-                      <p className="mb-2">This section should only be completed at the first clinical encounter. If not completed, it should be reviewed at the earliest opportunity.</p>
-                      <ul className="list-disc list-inside space-y-1">
-                        <li><strong>First visit/first interview:</strong> ask all questions</li>
-                        <li><strong>Second or subsequent visit/interview:</strong> Check if any answers have changed since the last visit.</li>
-                      </ul>
+                      <p>Gathers information about smoking history, alcohol intake and recreational cannabis use to explore the health behaviours of the population.</p>
                     </InfoTooltip>
                   )}
                 </div>
