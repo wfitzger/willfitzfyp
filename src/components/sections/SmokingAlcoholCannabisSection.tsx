@@ -128,7 +128,7 @@ const SmokingAlcoholCannabisSection = () => {
       {/* 9a. Smoking History */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg font-medium text-foreground">9a. Smoking History</CardTitle>
+          <CardTitle className="text-lg font-medium text-foreground">a. Smoking History</CardTitle>
         </CardHeader>
         <CardContent className="space-y-8">
           {/* Question a - Smoking status */}
@@ -359,7 +359,7 @@ const SmokingAlcoholCannabisSection = () => {
       {/* 9b. Alcohol Consumption */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg font-medium text-foreground">9b. Alcohol Consumption</CardTitle>
+          <CardTitle className="text-lg font-medium text-foreground">b. Alcohol Consumption</CardTitle>
         </CardHeader>
         <CardContent className="space-y-8">
           <div className="space-y-3">
@@ -453,7 +453,7 @@ const SmokingAlcoholCannabisSection = () => {
       {/* 9c. Recreational Drug Use including cannabis */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg font-medium text-foreground">9c. Recreational Drug Use including Cannabis Use</CardTitle>
+          <CardTitle className="text-lg font-medium text-foreground">c. Recreational Drug Use including Cannabis Use</CardTitle>
         </CardHeader>
         <CardContent className="space-y-8">
           {/* Cannabis */}
