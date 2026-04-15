@@ -24,7 +24,7 @@ const ClinicalVisitSection = () => {
 
   return (
     <div className="space-y-6">
-      {/* Intro Card */}
+      
       <Card className="border-l-4 border-l-primary">
         <CardContent className="pt-6">
           <p className="text-sm text-foreground leading-relaxed mb-2">
@@ -43,7 +43,7 @@ const ClinicalVisitSection = () => {
         </CardContent>
       </Card>
 
-      {/* Questions Card */}
+      
       <Card>
         <CardHeader>
           <CardTitle className="text-lg font-medium text-foreground">
@@ -51,7 +51,7 @@ const ClinicalVisitSection = () => {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-8">
-          {/* Question A - Encounter */}
+          
           <div className="space-y-3">
             <div className="flex items-center gap-2">
               <Label className="text-base font-medium text-foreground">
@@ -97,7 +97,7 @@ const ClinicalVisitSection = () => {
             </RadioGroup>
           </div>
 
-          {/* Question B - Type of clinic */}
+          
           <div className="space-y-3">
             <Label className="text-base font-medium text-foreground">
               b. Type of clinic
@@ -120,7 +120,7 @@ const ClinicalVisitSection = () => {
             </RadioGroup>
           </div>
 
-          {/* Question C - Seen by */}
+          
           <div className="space-y-3">
             <Label className="text-base font-medium text-foreground">
               c. Seen by (this visit)

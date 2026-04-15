@@ -67,7 +67,7 @@ const ClinicalQuestionnaire = () => {
           <SectionList onSectionSelect={handleSectionSelect} />
         ) : (
           <>
-            {/* Back Button and Section Header */}
+            
             <div className="space-y-4">
               <Button
                 variant="ghost"
@@ -113,10 +113,10 @@ const ClinicalQuestionnaire = () => {
               </div>
             </div>
 
-            {/* Section Content */}
+            
             {renderSectionContent()}
 
-            {/* Save Button */}
+            
             <div className="pt-4 border-t border-border flex gap-3">
               <Button variant="outline" onClick={handleBackToList}>
                 Back to sections
@@ -127,7 +127,7 @@ const ClinicalQuestionnaire = () => {
         )}
       </div>
 
-      {/* Chatbot */}
+      
       <ChatbotPopup />
     </div>
   );

@@ -15,7 +15,6 @@ type CannabisStatus = "" | "currently" | "previously" | "never";
 type DrugStatus = "" | "currently" | "previously" | "never";
 
 const SmokingAlcoholCannabisSection = () => {
-  // 9a Smoking
   const [smokingStatus, setSmokingStatus] = useState<SmokingStatus>("");
   const [smokingAgeStarted, setSmokingAgeStarted] = useState("");
   const [smokingAgeStopped, setSmokingAgeStopped] = useState("");
@@ -27,7 +26,6 @@ const SmokingAlcoholCannabisSection = () => {
   const [smokingPacksPerDay, setSmokingPacksPerDay] = useState("");
   const [smokingAdditional, setSmokingAdditional] = useState("");
 
-  // 9a-b Vaping
   const [vapingStatus, setVapingStatus] = useState<VapingStatus>("");
   const [vapingAgeStarted, setVapingAgeStarted] = useState("");
   const [vapingAgeStopped, setVapingAgeStopped] = useState("");
@@ -36,7 +34,6 @@ const SmokingAlcoholCannabisSection = () => {
   const [vapingDuration, setVapingDuration] = useState("");
   const [vapingAdditional, setVapingAdditional] = useState("");
 
-  // 9b Alcohol
   const [alcoholStatus, setAlcoholStatus] = useState<AlcoholStatus>("");
   const [alcoholAgeStarted, setAlcoholAgeStarted] = useState("");
   const [alcoholAgeStopped, setAlcoholAgeStopped] = useState("");
@@ -45,7 +42,6 @@ const SmokingAlcoholCannabisSection = () => {
   const [alcoholUnitsPerWeek, setAlcoholUnitsPerWeek] = useState("");
   const [alcoholAdditional, setAlcoholAdditional] = useState("");
 
-  // 9c-a Cannabis
   const [cannabisStatus, setCannabisStatus] = useState<CannabisStatus>("");
   const [cannabisAgeStarted, setCannabisAgeStarted] = useState("");
   const [cannabisAgeStopped, setCannabisAgeStopped] = useState("");
@@ -54,7 +50,6 @@ const SmokingAlcoholCannabisSection = () => {
   const [cannabisDuration, setCannabisDuration] = useState("");
   const [cannabisAdditional, setCannabisAdditional] = useState("");
 
-  // 9c-b Other drugs (multiple entries)
   interface DrugEntry {
     type: string;
     ageStarted: string;
@@ -146,7 +141,7 @@ const SmokingAlcoholCannabisSection = () => {
 
   return (
     <div className="space-y-6">
-      {/* Intro Card */}
+      
       <Card className="border-l-4 border-l-primary">
         <CardContent className="pt-6">
           <ul className="text-sm text-muted-foreground list-disc list-inside space-y-1">
@@ -156,13 +151,13 @@ const SmokingAlcoholCannabisSection = () => {
         </CardContent>
       </Card>
 
-      {/* 9a. Smoking History */}
+      
       <Card>
         <CardHeader>
           <CardTitle className="text-lg font-medium text-foreground">a. Smoking History</CardTitle>
         </CardHeader>
         <CardContent className="space-y-8">
-          {/* Question a - Smoking status */}
+          
           <div className="space-y-3">
             <Label className="text-base font-medium text-foreground">
               Smoking history: Has the participant ever smoked (tobacco)?
@@ -203,7 +198,7 @@ const SmokingAlcoholCannabisSection = () => {
 
           {showSmokingDetails && (
             <>
-              {/* Smoking type */}
+              
               <div className="space-y-3 pl-4">
                 <Label className="text-sm font-medium text-foreground">
                   If the participant has ever smoked/currently smoking:
@@ -243,7 +238,7 @@ const SmokingAlcoholCannabisSection = () => {
                 </div>
               </div>
 
-              {/* Frequency */}
+              
               <div className="space-y-3 pl-4">
                 <Label className="text-sm font-medium text-foreground">
                   How many cigarettes per day:
@@ -263,7 +258,7 @@ const SmokingAlcoholCannabisSection = () => {
                 )}
               </div>
 
-              {/* Additional smoking text */}
+              
               <div className="space-y-2 pl-4">
                 <Label className="text-sm text-muted-foreground">Add participant's additional smoking history here:</Label>
                 <Textarea
@@ -274,7 +269,7 @@ const SmokingAlcoholCannabisSection = () => {
                 />
               </div>
 
-              {/* Duration / Packs / Pack Years */}
+              
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pl-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-1">
@@ -307,7 +302,7 @@ const SmokingAlcoholCannabisSection = () => {
             </>
           )}
 
-          {/* Question b - Vaping */}
+          
           <div className="space-y-3 pt-4 border-t border-border">
             <Label className="text-base font-medium text-foreground">
               Vaping history: Has the participant ever vaped?
@@ -386,7 +381,7 @@ const SmokingAlcoholCannabisSection = () => {
         </CardContent>
       </Card>
 
-      {/* 9b. Alcohol Consumption */}
+      
       <Card>
         <CardHeader>
           <CardTitle className="text-lg font-medium text-foreground">b. Alcohol Consumption</CardTitle>
@@ -480,13 +475,13 @@ const SmokingAlcoholCannabisSection = () => {
         </CardContent>
       </Card>
 
-      {/* 9c. Recreational Drug Use including cannabis */}
+      
       <Card>
         <CardHeader>
           <CardTitle className="text-lg font-medium text-foreground">c. Recreational Drug Use</CardTitle>
         </CardHeader>
         <CardContent className="space-y-8">
-          {/* Cannabis */}
+          
           <div className="space-y-3">
             <Label className="text-base font-medium text-foreground">
               Has the participant ever taken recreational cannabis?
@@ -565,7 +560,7 @@ const SmokingAlcoholCannabisSection = () => {
             </div>
           )}
 
-          {/* Other recreational drugs */}
+          
           <div className="space-y-3 pt-4 border-t border-border">
             <Label className="text-base font-medium text-foreground">
               Has the participant ever taken other recreational drugs?
