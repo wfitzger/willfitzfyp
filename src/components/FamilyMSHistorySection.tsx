@@ -67,7 +67,7 @@ const FamilyMSHistorySection = () => {
   return (
     <div className="space-y-6">
 
-      {/* Intro Instructions */}
+      
       <Card className="border-l-4 border-l-primary">
         <CardContent className="pt-6">
           <ul className="text-sm text-muted-foreground list-disc list-inside space-y-1">
@@ -82,7 +82,7 @@ const FamilyMSHistorySection = () => {
         </CardContent>
       </Card>
 
-      {/* Questions Card */}
+      
       <Card>
         <CardHeader>
           <CardTitle className="text-lg font-medium text-foreground">
@@ -90,7 +90,7 @@ const FamilyMSHistorySection = () => {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-8">
-          {/* Question A */}
+          
           <div className="space-y-3">
             <Label className="text-base font-medium text-foreground">
               a. Have any of the participants' biological family members received
@@ -131,7 +131,7 @@ const FamilyMSHistorySection = () => {
             </RadioGroup>
           </div>
 
-          {/* Question B - Conditional */}
+          
           {hasFamilyMS === "yes" && (
             <div className="space-y-4">
               <Label className="text-base font-medium text-foreground">
@@ -163,7 +163,7 @@ const FamilyMSHistorySection = () => {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      {/* Relationship */}
+                      
                       <div className="space-y-2">
                         <Label className="text-sm text-muted-foreground">
                           Biological family member
@@ -187,7 +187,7 @@ const FamilyMSHistorySection = () => {
                         </Select>
                       </div>
 
-                      {/* Diagnosis Type */}
+                      
                       <div className="space-y-2">
                         <Label className="text-sm text-muted-foreground">
                           Type of MS diagnosed
@@ -238,7 +238,7 @@ const FamilyMSHistorySection = () => {
                         </RadioGroup>
                       </div>
 
-                      {/* Sex */}
+                      
                       <div className="space-y-2">
                         <Label className="text-sm text-muted-foreground">
                           Sex of this relative
@@ -304,7 +304,7 @@ const FamilyMSHistorySection = () => {
             </div>
           )}
 
-          {/* Question C */}
+          
           <div className="space-y-3">
             <Label className="text-base font-medium text-foreground">
               c. If the data collector needs to add extra for responses, i.e. both

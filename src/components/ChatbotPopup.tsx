@@ -58,7 +58,6 @@ const ChatbotPopup = () => {
     setMessage("");
     setIsStreaming(true);
 
-    // Prepare conversation history for the API (exclude the welcome message id=0 system-like message)
     const apiMessages = updatedMessages.map((m) => ({
       role: m.role,
       content: m.content,
@@ -89,12 +88,11 @@ const ChatbotPopup = () => {
       let assistantContent = "";
       let assistantId = updatedMessages.length;
 
-      // Add an empty assistant message to fill in as tokens arrive
       setMessages((prev) => [
         ...prev,
         { id: assistantId, role: "assistant", content: "" },
       ]);
-      setIsStreaming(false); // hide typing indicator once the assistant message exists
+      setIsStreaming(false);
 
       while (!streamDone) {
         const { done, value } = await reader.read();
@@ -134,7 +132,6 @@ const ChatbotPopup = () => {
         }
       }
 
-      // Final flush
       if (textBuffer.trim()) {
         for (let raw of textBuffer.split("\n")) {
           if (!raw) continue;
@@ -154,7 +151,7 @@ const ChatbotPopup = () => {
                 )
               );
             }
-          } catch { /* ignore */ }
+          } catch {  }
         }
       }
     } catch (e: unknown) {
@@ -172,10 +169,10 @@ const ChatbotPopup = () => {
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
-      {/* Chat Window */}
+      
       {isOpen && (
         <div className="absolute bottom-16 right-0 w-80 sm:w-96 bg-card border border-border rounded-lg shadow-xl overflow-hidden animate-in slide-in-from-bottom-2 duration-200">
-          {/* Header */}
+          
           <div className="bg-primary text-primary-foreground px-4 py-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <MessageCircle className="h-5 w-5" />
@@ -190,7 +187,7 @@ const ChatbotPopup = () => {
             </button>
           </div>
 
-          {/* Messages Area */}
+          
           <div className="h-72 p-4 overflow-y-auto bg-muted/30 space-y-3">
             {messages.map((msg) => (
               <div
@@ -214,7 +211,7 @@ const ChatbotPopup = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input Area */}
+          
           <div className="p-3 border-t border-border bg-card">
             <div className="flex gap-2">
               <Input
@@ -243,7 +240,7 @@ const ChatbotPopup = () => {
         </div>
       )}
 
-      {/* Toggle Button */}
+      
       <Button
         onClick={() => setIsOpen(!isOpen)}
         size="icon"

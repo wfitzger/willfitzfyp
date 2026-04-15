@@ -26,7 +26,6 @@ export const sections: Section[] = [
   { id: 15, title: "Endpoints and Vital Status", questionType: "mixed" },
 ];
 
-// Sections that have actual form content implemented
 const implementedSections = new Set([2, 4, 6, 9]);
 
 const getQuestionTypeLabel = (type: Section["questionType"]) => {

@@ -320,7 +320,7 @@ const MSProgressionSection = () => {
 
   return (
     <div className="space-y-6">
-      {/* Info card */}
+      
       <Card className="border-l-4 border-l-primary">
         <CardContent className="pt-6">
           <div className="flex items-start gap-2 mb-3">
@@ -334,7 +334,7 @@ const MSProgressionSection = () => {
         </CardContent>
       </Card>
 
-      {/* Gate question: is this a second or subsequent visit? */}
+      
       <Card>
         <CardContent className="pt-6 space-y-4">
           <Label className="text-base font-medium text-foreground">
@@ -361,7 +361,7 @@ const MSProgressionSection = () => {
 
       {isSubsequentVisit === "yes" && (
         <>
-          {/* MS Progression Tests */}
+          
           <Card>
             <CardHeader>
               <CardTitle className="text-lg font-medium text-foreground flex items-center">
@@ -455,7 +455,7 @@ const MSProgressionSection = () => {
             </CardContent>
           </Card>
 
-          {/* MRI Section */}
+          
           <Card>
             <CardHeader>
               <CardTitle className="text-lg font-medium text-foreground">a. MRI</CardTitle>
@@ -474,7 +474,7 @@ const MSProgressionSection = () => {
             </CardContent>
           </Card>
 
-          {/* Biomarkers */}
+          
           <Card>
             <CardHeader>
               <CardTitle className="text-lg font-medium text-foreground flex items-center gap-2">
@@ -485,7 +485,7 @@ const MSProgressionSection = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-8">
-              {/* Neurofilaments */}
+              
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
                   <Label className="text-base font-medium text-foreground">Were Neurofilament tests performed?</Label>
@@ -506,7 +506,7 @@ const MSProgressionSection = () => {
                 />
               </div>
 
-              {/* Other Biomarkers - Clinical */}
+              
               <div className="space-y-4">
                 <div className="flex items-center">
                   <Label className="text-base font-medium text-foreground">Were other biomarker tests performed?</Label>
@@ -573,13 +573,13 @@ const MSProgressionSection = () => {
             </CardContent>
           </Card>
 
-          {/* Monitoring Tools */}
+          
           <Card>
             <CardHeader>
               <CardTitle className="text-lg font-medium text-foreground">c. Monitoring Tools</CardTitle>
             </CardHeader>
             <CardContent className="space-y-10">
-              {/* T25FW */}
+              
               <div className="space-y-4">
                 <Label className="text-base font-medium text-foreground">Was Timed 25 Foot Walk (T25FW) performed?</Label>
                 <ConditionalTestStatus
@@ -623,7 +623,7 @@ const MSProgressionSection = () => {
                 )}
               </div>
 
-              {/* EDSS */}
+              
               {renderScoredTest(
                 "Was EDSS performed?",
                 "Expanded Disability Status Scale. Measures disability on a scale of 0.0 to 10.0.",
@@ -631,7 +631,7 @@ const MSProgressionSection = () => {
                 "EDSS Score (0.0 to 10.0)", true, "edss",
               )}
 
-              {/* SDMT */}
+              
               {renderScoredTest(
                 "Was SDMT performed?",
                 "Symbol Digit Modalities Test. Measures processing speed.",
@@ -639,7 +639,7 @@ const MSProgressionSection = () => {
                 "SDMT Score (no. of correct symbols)", true, "sdmt",
               )}
 
-              {/* BDI */}
+              
               {renderScoredTest(
                 "Was BDI performed?",
                 "Beck's Depression Inventory. Measures depression severity.",
@@ -647,7 +647,7 @@ const MSProgressionSection = () => {
                 "BDI Score", true, "bdi",
               )}
 
-              {/* HADS */}
+              
               {renderScoredTest(
                 "Was HADS performed?",
                 "Hospital Anxiety and Depression Scale. Also appears in the Mood section.",
@@ -657,7 +657,7 @@ const MSProgressionSection = () => {
             </CardContent>
           </Card>
 
-          {/* d. Other tests */}
+          
           <Card>
             <CardHeader>
               <CardTitle className="text-lg font-medium text-foreground flex items-center">
